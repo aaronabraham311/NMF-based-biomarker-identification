@@ -4,21 +4,24 @@
 
 # Cleaning all data into usable form
 
-# TO DO:
-# Eliminate NA or NULL
-# Remove extraneous columns/rows (identifiers)
-# Output total number of rows and columns
-
 cleanData <- function (
-  data.address ){
+  data.address,
+  rowNumber,
+  columnData){
   raw <- read.csv(data.address);
   
   noNullandNA <- eliminateNullandNA(raw)
+  cleanData <- noNullandNA[!rowNumber, !columnData]
+  return (c(cleanData, nrow(cleanData), ncol(cleanData)))
 }
 
 # Removes all rows with NA and null. Remove 0"
 eliminateNullandNA <- function (
   data) {
-   noNullandNA <- na.omit(data)
-   return(noNullandNA)
+   noNull <- na.omit(data)
+   
+   nonZeroRows <- apply(noNull, 1, function(row) all(row != 0))
+   noZero <- noNull[nonZeroRows, ]
+   
+   return(noZero)
 }

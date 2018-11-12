@@ -19,5 +19,10 @@ source(statistics.address)
 source(ml.address)
 
 # Parameters for this run:
+rowNumber <- "integer"
+columnNumber <- "integer"
 
 # Calling functions
+cleanedData <- cleanData[[1]]
+rowNumber <- cleanData[[2]]
+columnNumber <- cleanData[[3]]
