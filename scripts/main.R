@@ -5,7 +5,7 @@
 # Main script to start project
 
 # Importing files into main script
-data.cleaning.address <- ""
+data.cleaning.address <- "dataClean.R"
 data.handling.address <- ""
 nmf.projection.address <- ""
 statistics.address <- ""
@@ -13,7 +13,7 @@ ml.address <- ""
 data.address <- ""
 
 source(data.cleaning.address)
-source(data.handling.address)
+source(data.handling.address) # Not sure if this is needed
 source(nmf.projection.address)
 source(statistics.address)
 source(ml.address)
