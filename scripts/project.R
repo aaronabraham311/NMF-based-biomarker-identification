@@ -9,7 +9,7 @@
 # Return transformed data and all matrices
 
 # Libraries
-library("NMF")
+library("NMF") #https://cran.r-project.org/web/packages/NMF/vignettes/NMF-vignette.pdf
 
 projectNMF <- function (
   data,
@@ -24,5 +24,11 @@ projectNMF <- function (
   # Output start of methodology
   print(c("Running projectNMF on the following dataset: ", data.address))
   
+  # Default NMF 
+  nmfReduced <- nmf(data, k)
+  w <- basis(nmfReduced) # convert to data table? 
+  h <- coef(nmfReduced) # convert to data table?
+  features <- extractFeatures(nmfReduced)
   
+  return(nmfReduced, w, h, features)
 }
