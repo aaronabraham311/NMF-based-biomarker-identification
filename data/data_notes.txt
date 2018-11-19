@@ -1,0 +1,5 @@
+Data is all ADNI1 data. Diagnosis of rows from multiplex data:
+1. DXCURREN: 1 = control, 2 = MCI, 3 = AD
+2. DXCONV: 0 = No, 1 = Yes-Conversion, 2 = Reversion
+3. DXREV: 1 = MCI to Normal, 2 = AD to MCI, 3 = AD to Normal
+4. DXCONTYP: 1 = Normal to MCI, 2 = Normal to AD, 3 = MCI to AD
