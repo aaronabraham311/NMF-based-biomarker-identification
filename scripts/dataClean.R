@@ -7,7 +7,8 @@
 cleanData <- function (
   data.address,
   rowNumber,
-  columnData){
+  columnNumber,
+  key.address){
   raw <- read.csv(data.address);
   
   noNullandNA <- eliminateNullandNA(raw)
