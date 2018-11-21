@@ -12,6 +12,7 @@ statistics.address <- ""
 ml.address <- ""
 data.address <- "../data/raw/Biomarkers Consortium ADNI CSF Multiplex Raw Data.csv"
 key.address <- "../data/raw/Biomarkers Consortium ADNI QC Multiplex data.csv"
+data.output.address <- "../data/cleaned"
 
 source(data.cleaning.address)
 source(data.handling.address) 
@@ -20,11 +21,11 @@ source(statistics.address)
 source(ml.address)
 
 # Parameters for this run:
-rowNumber <- "integer"
-columnNumber <- "integer"
+rowRemoval <- NA # Array of rows to remove. NA otherwise
+columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
 
 # Calling functions
-cleanedDataObject <- cleanData(data.address,ro)
+cleanedDataObject <- cleanData(data.address,key.address, rowRemoval, columnRemoval, outputDirectory)
 cleanedData <- cleanData[[1]]
 rowNumber <- cleanData[[2]]
 columnNumber <- cleanData[[3]]

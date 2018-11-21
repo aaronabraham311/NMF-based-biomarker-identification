@@ -6,15 +6,17 @@
 
 cleanData <- function (
   data.address,
-  rowNumber,
-  columnNumber,
-  key.address){
+  key.address,
+  rowRemoval,
+  columnRemoval, 
+  output.address){
   raw <- read.csv(data.address);
   
-  noNullandNA <- eliminateNullandNA(raw)
-  labelledData <- labelData(noNullandNA, key.address)
+  noNullandNA <- eliminateNullandNA(raw, output.address)
+  labelledData <- labelData(noNullandNA, key.address, output.address)
   
-  cleanData <- noNullandNA[!rowNumber, !columnData]
+  cleanData <- noNullandNA[!rowRemoval, !columnRemoval]
+  write.csv(cleanData, output.address)
   return (c(cleanData, nrow(cleanData), ncol(cleanData)))
 }
 
