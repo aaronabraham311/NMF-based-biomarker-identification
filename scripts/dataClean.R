@@ -20,20 +20,22 @@ cleanData <- function (
   return (c(cleanData, nrow(cleanData), ncol(cleanData)))
 }
 
-# Removes all rows with NA and null. Remove 0"
+# Removes all rows with NA and null. Remove 0 and non-number symbols
 eliminateNullandNA <- function (
   data,
   output.address) {
-   noNull <- na.omit(data)
+   nonZeroColumns <- apply(data, 2, function(col) all(col != 0)) # Creates list of columns that have non-zero columns
+   noZero <- data[, nonZeroColumns] # Subsetting data
    
-   nonZeroColumns <- apply(noNull, 2, function(col) all(col != 0)) # Creates list of columns that have non-zero columns
-   noZero <- noNull[, nonZeroColumns] # Subsetting data
+   noPeriods <- apply(noZero, 2, function(col) gsub(".", NA, col)) # Replaces period with NA 
    
+   noNull <- na.omit(noPeriods)
+   cleaned <- noNull
    
-   print(c("Number of removed columns due to non-zero conditions: ", ncol(data) - length(nonZeroColumns))) # Outputting number of removed columns
-   write.csv(noZero, output.address)
+   print(c("Number of removed columns due to non-zero and non-numeric conditions: ", ncol(data) - ncol(cleaned))) # Outputting number of removed columns
+   write.csv(cleaned, output.address)
    
-   return(noZero)
+   return(cleaned)
 }
 
 labelData <- function(
