@@ -22,19 +22,24 @@ cleanData <- function (
 
 # Removes all rows with NA and null. Remove 0"
 eliminateNullandNA <- function (
-  data) {
+  data,
+  output.address) {
    noNull <- na.omit(data)
    
    nonZeroColumns <- apply(noNull, 2, function(col) all(col != 0)) # Creates list of columns that have non-zero columns
    noZero <- noNull[, nonZeroColumns] # Subsetting data
+   
+   
    print(c("Number of removed columns due to non-zero conditions: ", ncol(data) - length(nonZeroColumns))) # Outputting number of removed columns
+   write.csv(noZero, output.address)
    
    return(noZero)
 }
 
 labelData <- function(
   data,
-  key.address) {
+  key.address, 
+  output.address) {
   
   # Downloading key data
   keyData <- read.csv(key.address)
@@ -42,6 +47,7 @@ labelData <- function(
   colnames(keyData) <- c("rid", "diagnosis") # Renaming columns
   
   labelledData <- merge(data, keyData, by = "rid")
+  write.csv(labelledData, output.address)
   
   return (labelledData)
 }
