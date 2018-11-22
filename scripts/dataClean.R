@@ -12,10 +12,11 @@ cleanData <- function (
   output.address){
   raw <- read.csv(data.address);
   
+  cleanData <- noNullandNA[!rowRemoval, !columnRemoval]
+  
   noNullandNA <- eliminateNullandNA(raw, output.address)
   labelledData <- labelData(noNullandNA, key.address, output.address)
   
-  cleanData <- noNullandNA[!rowRemoval, !columnRemoval]
   write.csv(cleanData, output.address)
   return (c(cleanData, nrow(cleanData), ncol(cleanData)))
 }
