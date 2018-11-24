@@ -8,3 +8,15 @@
 # Column rank normalization
 # Variation filter
 
+handle <- function (
+  data ){
+  scaledData <- normalize(data)
+  
+}
+
+# Scaling all variables to mean of 0 and SD of 1
+normalize <- function (
+  data){
+  scaledData <- scale(data)
+  return (scaledData)
+}
