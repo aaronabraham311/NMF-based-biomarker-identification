@@ -10,8 +10,9 @@
 
 # Libraries
 library("NMF") #https://cran.r-project.org/web/packages/NMF/vignettes/NMF-vignette.pdf
+library("MASS")
 
-projectNMF <- function (
+extractFactors <- function (
   data,
   data.address,
   ncol,
@@ -22,7 +23,7 @@ projectNMF <- function (
   lamba = 1) {
   
   # Output start of methodology
-  print(c("Running projectNMF on the following dataset: ", data.address))
+  print(c("Running extractFactors on the following dataset: ", data.address))
   
   # Default NMF 
   nmfReduced <- nmf(data, k)
@@ -30,5 +31,49 @@ projectNMF <- function (
   h <- coef(nmfReduced) # convert to data table?
   features <- extractFeatures(nmfReduced)
   
+  # Ordering features
+  dist.matrix <- dist(t(w))
+  HC <- hclust(dist.matrix, method = "complete")
+  w <- w[,HC$order]
+  h<- h[HC$order,]
+  
   return(nmfReduced, w, h, features)
+}
+
+newDataProjection <- function (
+  data,
+  data.address,
+  w,
+  h) {
+  print(c("Running newDataProjection on the following dataset: ", data.address))
+  
+  data.rows <- row.names(data)
+  w.row.names <- row.names(w)
+  
+  overlap <- intersect(data.rows, w.row.names)
+  
+  print (c("Number of metabolites in original data: ", nrow(data)))
+  print (c("Number of metabolites in W:", nrow(w)))
+  print (c("Size of overlap:", length(overlap)))
+  
+  locations.w <- match(overlap, w.row.names, nomatch = 0)
+  w2 <- w[locations.w, ]
+  
+  locations.m <- match(overlap, data.rows, nomatch = 0)
+  m2 <- m[locations.m, ]
+  
+  print("Projecting using pseudo-inverse")
+  H <- ginv(w2) %*% m2
+  
+  # Normalizing projected data
+  n.col <- length(H[1,])
+  for (i in 1:n.col) {
+    S.2 <- sqrt(sum(H[,i]*H[,i]))
+    H[,i] <- H[,i]/S.2
+  }
+  
+  # Saving projected dataset 
+  V <- data.frame(H)
+  return(V)
+  
 }
