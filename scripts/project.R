@@ -26,9 +26,14 @@ extractFactors <- function (
   print(c("Running extractFactors on the following dataset: ", data.address))
   
   # Default NMF 
-  nmfReduced <- nmf(data, k)
+  labels <- data[c("rid", "diagnosis"),] # Removing labels such that it is not involved in NMF
+  metaboliteData <- data[-c("rid","diagnosis"),]
+  
+  # BIG PROBLEM: When we do NMF, how do we rediagnose projected data?
+  nmfReduced <- nmf(metaboliteData, k)
   w <- basis(nmfReduced) # convert to data table? 
   h <- coef(nmfReduced) # convert to data table?
+  fullData <- merge(h, labels, by)
   features <- extractFeatures(nmfReduced)
   
   # Ordering features
@@ -47,7 +52,10 @@ newDataProjection <- function (
   h) {
   print(c("Running newDataProjection on the following dataset: ", data.address))
   
-  data.rows <- row.names(data)
+  labels <- data[c("rid", "diagnosis"),] # Removing labels such that it is not involved in NMF
+  metaboliteData <- data[-c("rid","diagnosis"),]
+  
+  data.rows <- row.names(metaboliteData)
   w.row.names <- row.names(w)
   
   overlap <- intersect(data.rows, w.row.names)
