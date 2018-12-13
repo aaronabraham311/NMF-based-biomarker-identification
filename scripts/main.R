@@ -8,7 +8,7 @@
 data.cleaning.address <- "dataClean.R"
 data.handling.address <- "normalize.R"
 nmf.projection.address <- "project.R"
-statistics.address <- ""
+statistics.address <- "statistics.R"
 ml.address <- ""
 data.address <- "../data/raw/Biomarkers Consortium ADNI CSF Multiplex Raw Data.csv"
 key.address <- "../data/raw/Biomarkers Consortium ADNI QC Multiplex data.csv"
