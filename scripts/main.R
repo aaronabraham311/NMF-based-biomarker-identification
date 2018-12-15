@@ -10,22 +10,22 @@ data.handling.address <- "scripts/handle.R"
 nmf.projection.address <- "scripts/project.R"
 statistics.address <- "scripts/statistics.R"
 ml.address <- ""
-data.address <- "data/raw/Biomarkers Consortium ADNI CSF Multiplex Raw Data.csv"
-key.address <- "data/raw/Biomarkers Consortium ADNI QC Multiplex data.csv"
-data.output.address <- "data/cleaned/"
+data.address <- "./data/raw/Biomarkers Consortium ADNI CSF QC Multiplex data.csv"
+key.address <- "./data/raw/DXSUM_PDXCONV_ADNIALL.csv"
+data.output.address <- "./data/cleaned/"
 
 source(data.cleaning.address)
 source(data.handling.address) 
 source(nmf.projection.address)
 source(statistics.address)
-source(ml.address)
+#source(ml.address)
 
 # Parameters for this run:
-rowRemoval <- NA # Array of rows to remove. NA otherwise
+#rowRemoval <- "" # Array of rows to remove. NA otherwise
 columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
 
 # Calling functions
-cleanedDataObject <- cleanData(data.address,key.address, rowRemoval, columnRemoval, outputDirectory)
+cleanedDataObject <- cleanData(data.address,key.address, columnRemoval, data.output.address)
 cleanedData <- cleanData[[1]]
 rowNumber <- cleanData[[2]]
 columnNumber <- cleanData[[3]]
