@@ -5,14 +5,14 @@
 # Main script to start project
 
 # Importing files into main script
-data.cleaning.address <- "dataClean.R"
-data.handling.address <- "normalize.R"
-nmf.projection.address <- "project.R"
-statistics.address <- "statistics.R"
+data.cleaning.address <- "scripts/dataClean.R"
+data.handling.address <- "scripts/handle.R"
+nmf.projection.address <- "scripts/project.R"
+statistics.address <- "scripts/statistics.R"
 ml.address <- ""
-data.address <- "../data/raw/Biomarkers Consortium ADNI CSF Multiplex Raw Data.csv"
-key.address <- "../data/raw/Biomarkers Consortium ADNI QC Multiplex data.csv"
-data.output.address <- "../data/cleaned"
+data.address <- "data/raw/Biomarkers Consortium ADNI CSF Multiplex Raw Data.csv"
+key.address <- "data/raw/Biomarkers Consortium ADNI QC Multiplex data.csv"
+data.output.address <- "data/cleaned/"
 
 source(data.cleaning.address)
 source(data.handling.address) 
