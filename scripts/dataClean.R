@@ -31,7 +31,11 @@ eliminateNullandNA <- function (
    noNull <- na.omit(noFactors)
    cleaned <- noNull
    
+   # Removing rows with NA
+   cleaned <- cleaned[complete.cases(cleaned),]
+   
    print(c("Number of removed columns due to non-zero and non-numeric conditions: ", ncol(data) - ncol(cleaned))) # Outputting number of removed columns
+   print(c("Number of removed rows due to non-zero and non-numeric conditions:", nrow(data) - nrow(cleaned))) # Outputting number of removed rows
    return(cleaned)
 }
 
@@ -47,5 +51,9 @@ labelData <- function(
   
   labelledData <- merge(data, keyData, by = "rid")
   
-  return (labelledData)
+  # Removing duplicated data and removing NA
+  noNullLabelledData <- eliminateNullandNA(labelledData)
+  uniqueLablledData <- noNullLabelledData[!duplicated(noNullLabelledData$rid),]
+  
+  return (uniqueLabelledData)
 }
