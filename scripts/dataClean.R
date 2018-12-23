@@ -18,7 +18,9 @@ cleanData <- function (
   noNullandNA <- eliminateNullandNA(removedRowsAndCols)
   labelledData <- labelData(noNullandNA, key.address, output.address)
   
-  write.csv(cleanData, paste(output.address, "cleaned.csv"))
+  cleanData <- labelledData
+  
+  write.csv(cleanData, paste(output.address, "cleaned.csv"), row.names = FALSE)
   return (c(cleanData, nrow(cleanData), ncol(cleanData)))
 }
 
@@ -49,6 +51,8 @@ labelData <- function(
   keyData <- keyData[c("RID", "DXCURREN")] #RID serves as joiner, DXCURREN is diagnosis indicator. Possible extension: use columns that indicate diagnosis change
   colnames(keyData) <- c("rid", "diagnosis") # Renaming columns
   
+  # Removing duplicate diagnoses:
+  keyData <- eliminateNullandNA(keyData)
   labelledData <- merge(data, keyData, by = "rid")
   
   # Removing duplicated data and removing NA
