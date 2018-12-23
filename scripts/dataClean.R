@@ -18,10 +18,12 @@ cleanData <- function (
   noNullandNA <- eliminateNullandNA(removedRowsAndCols)
   labelledData <- labelData(noNullandNA, key.address, output.address)
   
-  cleanData <- labelledData
+  cleanedData <- labelledData
   
-  write.csv(cleanData, paste(output.address, "cleaned.csv"), row.names = FALSE)
-  return (c(cleanData, nrow(cleanData), ncol(cleanData)))
+  write.csv(cleanedData, paste(output.address, "cleaned.csv"), row.names = FALSE)
+  
+  returnValues <- list("cleanedData" = cleanedData, "numRows" = nrow(cleanedData), "numCols" = ncol(cleanedData))
+  return (returnValues)
 }
 
 # Removes all rows with NA and null. Remove 0 and non-number symbols
@@ -57,7 +59,7 @@ labelData <- function(
   
   # Removing duplicated data and removing NA
   noNullLabelledData <- eliminateNullandNA(labelledData)
-  uniqueLablledData <- noNullLabelledData[!duplicated(noNullLabelledData$rid),]
+  uniqueLabelledData <- noNullLabelledData[!duplicated(noNullLabelledData$rid),]
   
   return (uniqueLabelledData)
 }

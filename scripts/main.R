@@ -26,6 +26,6 @@ columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
 
 # Calling functions
 cleanedDataObject <- cleanData(data.address,key.address, columnRemoval, data.output.address)
-cleanedData <- cleanData[[1]]
-rowNumber <- cleanData[[2]]
-columnNumber <- cleanData[[3]]
+cleanedData <- cleanData$cleanedData
+rowNumber <- cleanData$numRows
+columnNumber <- cleanData$numCols
