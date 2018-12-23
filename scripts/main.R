@@ -23,9 +23,17 @@ source(statistics.address)
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
 columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
+ceiling <- 1000
+threshold <- -1000
+nonScaleColumns <- c("rid", "diagnosis")
 
-# Calling functions
-cleanedDataObject <- cleanData(data.address,key.address, columnRemoval, data.output.address)
-cleanedData <- cleanData$cleanedData
-rowNumber <- cleanData$numRows
-columnNumber <- cleanData$numCols
+## Calling functions
+
+# Cleaning data
+cleanedDataObject <- cleanData(data.address, key.address, columnRemoval, data.output.address)
+cleanedData <- cleanedDataObject$cleanedData
+rowNumber <- cleanedDataObject$numRows
+columnNumber <- cleanedDataObject$numCols
+
+# Handling data 
+handledData <- handle(cleanedData, ceiling, threshold, nonScaleColumns, data.output.address)

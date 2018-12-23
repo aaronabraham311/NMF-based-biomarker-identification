@@ -11,15 +11,22 @@
 handle <- function (
   data,
   ceiling,
-  threshold){
-  scaledData <- normalize(data)
+  threshold,
+  nonScaleColumns,
+  output.address){
+  
   replacedData <- thresholdAndCeiling(data, ceiling, threshold)
+  scaledData <- normalize(replacedData, nonScaleColumns)
+  write.csv(scaledData, paste(output.address, "normalized.csv"), row.names = FALSE)
+  
+  return(scaledData)
 }
 
 # Scaling all variables to mean of 0 and SD of 1
 normalize <- function (
-  data){
-  scaledData <- scale(data)
+  data,
+  nonScaleColumns){
+  scaledData <- data.frame(data[nonScaleColumns], apply(data[,-which(names(data) %in% nonScaleColumns)], 2, scale))
   return (scaledData)
 }
 
