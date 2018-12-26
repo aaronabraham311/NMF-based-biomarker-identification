@@ -26,7 +26,9 @@ handle <- function (
 normalize <- function (
   data,
   nonScaleColumns){
-  scaledData <- data.frame(data[nonScaleColumns], apply(data[,-which(names(data) %in% nonScaleColumns)], 2, scale))
+  scaledData <- data
+  scaledData[,-which(names(data) %in% nonScaleColumns)] <- 
+    lapply(data[,-which(names(data) %in% nonScaleColumns)], scale)
   return (scaledData)
 }
 
@@ -37,4 +39,7 @@ thresholdAndCeiling <- function (
   threshold) {
   data <- apply(data, 2, function(col) pmax(col, threshold))
   data <- apply(data, 2, function(col) pmin(col, ceiling))
+  data <- data.frame(data)
+  
+  return(data)
 }
