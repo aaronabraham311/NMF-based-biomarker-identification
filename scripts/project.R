@@ -33,7 +33,7 @@ extractFactors <- function (
   nmfReduced <- nmf(metaboliteData, k)
   w <- basis(nmfReduced) # convert to data table? 
   h <- coef(nmfReduced) # convert to data table?
-  fullData <- merge(h, labels, by)
+  fullData <- cbind(h, labels)
   features <- extractFeatures(nmfReduced)
   
   # Ordering features

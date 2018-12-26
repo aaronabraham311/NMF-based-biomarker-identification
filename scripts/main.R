@@ -4,6 +4,9 @@
 
 # Main script to start project
 
+# Libraries
+library(caret)
+
 # Importing files into main script
 data.cleaning.address <- "scripts/dataClean.R"
 data.handling.address <- "scripts/handle.R"
@@ -26,6 +29,7 @@ columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
 ceiling <- 1000
 threshold <- -1000
 nonScaleColumns <- c("rid", "diagnosis")
+k <- 3
 
 ## Calling functions
 
@@ -37,3 +41,11 @@ columnNumber <- cleanedDataObject$numCols
 
 # Handling data 
 handledData <- handle(cleanedData, ceiling, threshold, nonScaleColumns, data.output.address)
+
+# Splitting into training and testing sets
+indices <- createDataPartition(handledData$rid, p = 0.7, list = FALSE) # Setting 70/30 split between training and testing
+train <- handledData[indices,]
+test <- handledData[-indices,]
+
+# Projection creation
+trainingProjectionsObj <- extractFactors(train, data)
