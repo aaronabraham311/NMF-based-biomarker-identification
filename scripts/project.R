@@ -27,7 +27,7 @@ extractFactors <- function (
   
   # Default NMF 
   labels <- data[,c("rid", "diagnosis")] # Removing labels such that it is not involved in NMF
-  metaboliteData <- data[,-c("rid","diagnosis")]
+  metaboliteData <- subset(data, select = -c(rid, diagnosis))
   
   nmfReduced <- nmf(metaboliteData, k)
   w <- basis(nmfReduced) # convert to data table? 
