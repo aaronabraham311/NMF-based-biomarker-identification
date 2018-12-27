@@ -26,10 +26,9 @@ extractFactors <- function (
   print(c("Running extractFactors on the following dataset: ", data.address))
   
   # Default NMF 
-  labels <- data[c("rid", "diagnosis"),] # Removing labels such that it is not involved in NMF
-  metaboliteData <- data[-c("rid","diagnosis"),]
+  labels <- data[,c("rid", "diagnosis")] # Removing labels such that it is not involved in NMF
+  metaboliteData <- data[,-c("rid","diagnosis")]
   
-  # BIG PROBLEM: When we do NMF, how do we rediagnose projected data?
   nmfReduced <- nmf(metaboliteData, k)
   w <- basis(nmfReduced) # convert to data table? 
   h <- coef(nmfReduced) # convert to data table?
