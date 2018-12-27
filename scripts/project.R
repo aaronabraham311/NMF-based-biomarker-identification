@@ -14,7 +14,7 @@ library("MASS")
 
 extractFactors <- function (
   data,
-  data.address,
+  output.address,
   ncol,
   nrow,
   k,
@@ -23,7 +23,7 @@ extractFactors <- function (
   lamba = 1) {
   
   # Output start of methodology
-  print(c("Running extractFactors on the following dataset: ", data.address))
+  print(c("Running extractFactors on the following dataset: ", output.address))
   
   # Default NMF 
   labels <- data[,c("rid", "diagnosis")] # Removing labels such that it is not involved in NMF
@@ -40,6 +40,11 @@ extractFactors <- function (
   HC <- hclust(dist.matrix, method = "complete")
   w <- w[,HC$order]
   h<- h[HC$order,]
+  
+  # Writing to external file
+  write.csv(w, paste(output.address, "w.csv"), row.names = FALSE)
+  write.csv(h, paste(output.address, 'h.csv'), row.names = FALSE)
+  
   
   return(nmfReduced, w, h, features)
 }

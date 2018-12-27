@@ -48,4 +48,4 @@ train <- handledData[indices,]
 test <- handledData[-indices,]
 
 # Projection creation
-trainingProjectionsObj <- extractFactors(train, data)
+trainingProjectionsObj <- extractFactors(train, data, columnNumber, rowNumber, k)
