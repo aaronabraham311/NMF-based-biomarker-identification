@@ -13,7 +13,7 @@ data.handling.address <- "scripts/handle.R"
 nmf.projection.address <- "scripts/project.R"
 statistics.address <- "scripts/statistics.R"
 ml.address <- ""
-data.address <- "./data/raw/Biomarkers Consortium ADNI CSF QC Multiplex data.csv"
+data.address <- "./data/raw/adni_plasma_qc_multiplex_11Nov2010.csv"
 key.address <- "./data/raw/DXSUM_PDXCONV_ADNIALL.csv"
 data.output.address <- "./data/cleaned/"
 
@@ -25,9 +25,9 @@ source(statistics.address)
 
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
-columnRemoval <- c(2,162,163) # Array of columns to remove. NA otherwise
+columnRemoval <- c(1,3,4,5) # Array of columns to remove. NA otherwise
 ceiling <- 1000
-threshold <- -1000
+threshold <- 0
 nonScaleColumns <- c("rid", "diagnosis")
 k <- 3
 

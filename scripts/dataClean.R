@@ -13,7 +13,7 @@ cleanData <- function (
   
   print(c("Running cleaning function on: ", data.address))
   
-  removedRowsAndCols <- raw[-c(columnRemoval)]
+  removedRowsAndCols <- subset(raw, select = -c(columnRemoval))
   
   noNullandNA <- eliminateNullandNA(removedRowsAndCols)
   labelledData <- labelData(noNullandNA, key.address, output.address)
@@ -51,11 +51,11 @@ labelData <- function(
   # Downloading key data
   keyData <- read.csv(key.address)
   keyData <- keyData[c("RID", "DXCURREN")] #RID serves as joiner, DXCURREN is diagnosis indicator. Possible extension: use columns that indicate diagnosis change
-  colnames(keyData) <- c("rid", "diagnosis") # Renaming columns
+  colnames(keyData) <- c("RID", "diagnosis") # Renaming columns
   
   # Removing duplicate diagnoses:
   keyData <- eliminateNullandNA(keyData)
-  labelledData <- merge(data, keyData, by = "rid")
+  labelledData <- merge(data, keyData, by = "RID")
   
   # Removing duplicated data and removing NA
   noNullLabelledData <- eliminateNullandNA(labelledData)
