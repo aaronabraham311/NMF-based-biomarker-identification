@@ -27,7 +27,7 @@ source(statistics.address)
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
 columnRemoval <- c(1,3,4,5) # Array of columns to remove. NA otherwise
-ceiling <- 1000
+ceiling <- 100000
 threshold <- 0
 nonScaleColumns <- c("rid", "diagnosis")
 k <- 3
