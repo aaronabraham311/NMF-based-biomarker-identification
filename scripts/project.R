@@ -26,8 +26,8 @@ extractFactors <- function (
   print(c("Running extractFactors on the following dataset: ", output.address))
   
   # Default NMF 
-  labels <- data[,c("rid", "diagnosis")] # Removing labels such that it is not involved in NMF
-  metaboliteData <- subset(data, select = -c(rid, diagnosis))
+  labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in NMF
+  metaboliteData <- subset(data, select = -c(RID, diagnosis))
   
   nmfReduced <- nmf(metaboliteData, k)
   w <- basis(nmfReduced) # convert to data table? 
@@ -56,8 +56,8 @@ newDataProjection <- function (
   h) {
   print(c("Running newDataProjection on the following dataset: ", data.address))
   
-  labels <- data[c("rid", "diagnosis"),] # Removing labels such that it is not involved in NMF
-  metaboliteData <- data[-c("rid","diagnosis"),]
+  labels <- data[c("RID", "diagnosis"),] # Removing labels such that it is not involved in NMF
+  metaboliteData <- data[-c("RID","diagnosis"),]
   
   data.rows <- row.names(metaboliteData)
   w.row.names <- row.names(w)

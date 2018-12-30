@@ -44,7 +44,7 @@ columnNumber <- cleanedDataObject$numCols
 handledData <- handle(cleanedData, ceiling, threshold, nonScaleColumns, data.output.address)
 
 # Splitting into training and testing sets
-indices <- createDataPartition(handledData$rid, p = 0.7, list = FALSE) # Setting 70/30 split between training and testing
+indices <- createDataPartition(handledData$RID, p = 0.7, list = FALSE) # Setting 70/30 split between training and testing
 train <- handledData[indices,]
 test <- handledData[-indices,]
 
