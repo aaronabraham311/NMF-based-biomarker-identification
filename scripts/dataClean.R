@@ -16,13 +16,15 @@ cleanData <- function (
   removedRowsAndCols <- subset(raw, select = -c(columnRemoval))
   
   noNullandNA <- eliminateNullandNA(removedRowsAndCols)
-  labelledData <- labelData(noNullandNA, key.address, output.address)
   
-  cleanedData <- labelledData
+  # Removing duplicates
+  uniqueNoNullandNA <- noNullandNA %>% group_by(RID) %>% mutate_all(funs(mean), -1) %>% distinct
   
-  write.csv(cleanedData, paste(output.address, "cleaned.csv"), row.names = FALSE)
+  labelledData <- labelData(uniqueNoNullandNA, key.address, output.address)
   
-  returnValues <- list("cleanedData" = cleanedData, "numRows" = nrow(cleanedData), "numCols" = ncol(cleanedData))
+  write.csv(labelledData, paste(output.address, "cleaned.csv"), row.names = FALSE)
+  
+  returnValues <- list("cleanedData" = labelledData, "numRows" = nrow(labelledData), "numCols" = ncol(labelledData))
   return (returnValues)
 }
 
@@ -32,11 +34,11 @@ eliminateNullandNA <- function (
    noZero <- data[,apply(data, 2, function(col) !all(col == 0))]
    noFactors <- noZero[, !sapply(data, is.factor)]
    
+   # Remove NA
    noNull <- na.omit(noFactors)
    cleaned <- noNull
-   
-   # Removing rows with NA
    cleaned <- cleaned[complete.cases(cleaned),]
+   
    
    print(c("Number of removed columns due to non-zero and non-numeric conditions: ", ncol(data) - ncol(cleaned))) # Outputting number of removed columns
    print(c("Number of removed rows due to non-zero and non-numeric conditions:", nrow(data) - nrow(cleaned))) # Outputting number of removed rows
@@ -55,11 +57,9 @@ labelData <- function(
   
   # Removing duplicate diagnoses:
   keyData <- eliminateNullandNA(keyData)
+  keyData <- keyData[!duplicated(keyData$RID),]
+  
   labelledData <- merge(data, keyData, by = "RID")
   
-  # Removing duplicated data and removing NA
-  noNullLabelledData <- eliminateNullandNA(labelledData)
-  uniqueLabelledData <- noNullLabelledData[!duplicated(noNullLabelledData$rid),]
-  
-  return (uniqueLabelledData)
+  return (labelledData)
 }

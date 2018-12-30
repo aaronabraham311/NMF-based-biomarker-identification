@@ -5,6 +5,7 @@
 # Main script to start project
 
 # Libraries
+library(dplyr)
 library(caret)
 
 # Importing files into main script
