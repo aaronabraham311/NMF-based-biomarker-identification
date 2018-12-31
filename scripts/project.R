@@ -9,7 +9,7 @@
 # Return transformed data and all matrices
 
 # Libraries
-library("NMF") #https://cran.r-project.org/web/packages/NMF/vignettes/NMF-vignette.pdf
+library("NNLM") #https://cran.r-project.org/web/packages/NNLM/vignettes/Fast-And-Versatile-NMF.html#background
 library("MASS")
 
 extractFactors <- function (
@@ -25,28 +25,26 @@ extractFactors <- function (
   # Output start of methodology
   print(c("Running extractFactors on the following dataset: ", output.address))
   
-  # Default NMF 
+  # Transpose of matrix for factorization
+  data <- data.matrix(data)
+  row.names(data) <- data[,"RID"]
   labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in NMF
   metaboliteData <- subset(data, select = -c(RID, diagnosis))
   
-  nmfReduced <- nmf(metaboliteData, k)
-  w <- basis(nmfReduced) # convert to data table? 
-  h <- coef(nmfReduced) # convert to data table?
-  fullData <- cbind(h, labels)
-  features <- extractFeatures(nmfReduced)
+  metaboliteData <- t(metaboliteData)
   
-  # Ordering features
-  dist.matrix <- dist(t(w))
-  HC <- hclust(dist.matrix, method = "complete")
-  w <- w[,HC$order]
-  h<- h[HC$order,]
+  # Default NMF 
+  decomp <- nnmf(metaboliteData, k, rel.tol = 1e-5)
+  w <- decomp$W
+  h <- decomp$H
+  w <- cbind(w, labels[,"diagnosis"])
+  colnames(w) <- c("V1", "V2", "V3", "diagnosis")
   
   # Writing to external file
   write.csv(w, paste(output.address, "w.csv"), row.names = FALSE)
   write.csv(h, paste(output.address, 'h.csv'), row.names = FALSE)
   
-  
-  return(nmfReduced, w, h, features)
+  return(decomp, w, h)
 }
 
 newDataProjection <- function (
