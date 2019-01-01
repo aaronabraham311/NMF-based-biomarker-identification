@@ -18,6 +18,7 @@ ml.address <- ""
 data.address <- "./data/raw/adni_plasma_qc_multiplex_11Nov2010.csv"
 key.address <- "./data/raw/DXSUM_PDXCONV_ADNIALL.csv"
 data.output.address <- "./data/cleaned/"
+visualizations.output.address <- "./visuals/"
 
 source(data.cleaning.address)
 source(data.handling.address) 
@@ -33,6 +34,7 @@ ceiling <- 100000
 threshold <- 0
 nonScaleColumns <- c("rid", "diagnosis")
 k <- 3
+labels <- "diagnosis"
 
 ## Calling functions
 
@@ -52,3 +54,8 @@ test <- handledData[-indices,]
 
 # Projection creation
 trainingProjectionsObj <- extractFactors(train, data.output.address, columnNumber, rowNumber, k)
+w <- trainingProjectionsObj$w
+h <- trainingProjectionsObj$h
+
+# Hierarchical clustering
+hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)

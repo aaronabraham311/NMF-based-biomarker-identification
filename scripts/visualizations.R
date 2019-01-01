@@ -16,15 +16,13 @@ hierarchicalClustering <- function(
   k,
   labels,
   title,
-  xlabs,
-  ylabs,
   file,
   output.address) {
   # Cluster via distance function
   cluster <- hclust(dist(data)) # Note: method can be changed
   
   # Plotting function
-  hclust <- plot(cluster, labels = data[labels,], title = title, xlab = xlabs, y = ylabs)
+  hclust <- plot(cluster, labels = data[,labels], main = title)
   
   #Saving plot
   png(filename = paste(output.address, file))
