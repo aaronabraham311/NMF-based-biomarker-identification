@@ -22,7 +22,7 @@ cleanData <- function (
   
   labelledData <- labelData(uniqueNoNullandNA, key.address, output.address)
   
-  write.csv(labelledData, paste(output.address, "cleaned.csv"), row.names = FALSE)
+  write.csv(labelledData, paste(output.address, "cleaned.csv"), sep = "", row.names = FALSE)
   
   returnValues <- list("cleanedData" = labelledData, "numRows" = nrow(labelledData), "numCols" = ncol(labelledData))
   return (returnValues)

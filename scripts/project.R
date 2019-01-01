@@ -46,8 +46,8 @@ extractFactors <- function (
   row.names(h)[nrow(h)] <- "diagnosis"
   
   # Writing to external file
-  write.csv(w, paste(output.address, "w.csv"), row.names = FALSE)
-  write.csv(h, paste(output.address, 'h.csv'), row.names = FALSE)
+  write.csv(w, paste(output.address, "w.csv"), sep = "", row.names = FALSE)
+  write.csv(h, paste(output.address, 'h.csv'), sep = "",  row.names = FALSE)
   
   returnValues <- list("decomp" = decomp, "w" = w, "h" = h)
   return(returnValues)
