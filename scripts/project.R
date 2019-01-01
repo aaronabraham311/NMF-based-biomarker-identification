@@ -37,14 +37,20 @@ extractFactors <- function (
   decomp <- nnmf(metaboliteData, k, rel.tol = 1e-5)
   w <- decomp$W
   h <- decomp$H
-  w <- cbind(w, labels[,"diagnosis"])
-  colnames(w) <- c("V1", "V2", "V3", "diagnosis")
+  
+  # Adding diagnosis row
+  h <- rbind(h, labels[,"diagnosis"])
+  
+  w <- data.frame(w)
+  h <- data.frame(h)
+  row.names(h)[nrow(h)] <- "diagnosis"
   
   # Writing to external file
   write.csv(w, paste(output.address, "w.csv"), row.names = FALSE)
   write.csv(h, paste(output.address, 'h.csv'), row.names = FALSE)
   
-  return(decomp, w, h)
+  returnValues <- list("decomp" = decomp, "w" = w, "h" = h)
+  return(returnValues)
 }
 
 newDataProjection <- function (
