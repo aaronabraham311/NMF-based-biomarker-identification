@@ -53,9 +53,13 @@ train <- handledData[indices,]
 test <- handledData[-indices,]
 
 # Projection creation
-trainingProjectionsObj <- extractFactors(train, data.output.address, columnNumber, rowNumber, k)
+trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices, k)
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
+
+# NMF train and test dataset
+nmfTrain <- trainingProjectionsObj$train
+nmfTest <- trainingProjectionsObj$test
 
 # Hierarchical clustering
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
