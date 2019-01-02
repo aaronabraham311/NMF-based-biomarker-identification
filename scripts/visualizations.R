@@ -9,7 +9,7 @@
 # Heatmaps
 
 # Libraries
-
+library(dendextend)
 
 hierarchicalClustering <- function(
   data,
@@ -19,11 +19,16 @@ hierarchicalClustering <- function(
   file,
   output.address) {
   # Cluster via distance function
-  cluster <- hclust(dist(data)) # Note: method can be changed
+  dend <- data %>%
+          dist %>%
+          hclust(method = "complete") %>% 
+          as.dendrogram # Note: method can be changed
   
-  # Plotting function
-  hclust <- plot(cluster, labels = data[,labels], main = title)
-  
+  # Plotting and changing visuals
+  labels(dend) <- data[,labels]
+  plot <- dend %>%
+          color_branches(k = 3)
+
   #Saving plot
   png(filename = paste(output.address, file))
   dev.off()
