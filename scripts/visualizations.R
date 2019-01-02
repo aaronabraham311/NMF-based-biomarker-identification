@@ -28,8 +28,12 @@ hierarchicalClustering <- function(
   labels(dend) <- data[,labels]
   plot <- dend %>%
           color_branches(k = 3)
+  
+  #Intializing file
+  png(filename = paste(output.address, file))
+  
+  plot(plot, main = title)
 
   #Saving plot
-  png(filename = paste(output.address, file))
   dev.off()
 }

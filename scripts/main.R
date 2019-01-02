@@ -14,7 +14,7 @@ data.handling.address <- "scripts/handle.R"
 nmf.projection.address <- "scripts/project.R"
 statistics.address <- "scripts/statistics.R"
 visualizations.address <- "scripts/visualizations.R"
-ml.address <- ""
+ml.address <- "scripts/ml.R"
 data.address <- "./data/raw/adni_plasma_qc_multiplex_11Nov2010.csv"
 key.address <- "./data/raw/DXSUM_PDXCONV_ADNIALL.csv"
 data.output.address <- "./data/cleaned/"
@@ -24,8 +24,8 @@ source(data.cleaning.address)
 source(data.handling.address) 
 source(nmf.projection.address)
 source(visualizations.address)
+source(ml.address)
 source(statistics.address)
-#source(ml.address)
 
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
@@ -59,3 +59,5 @@ h <- trainingProjectionsObj$h
 
 # Hierarchical clustering
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
+
+# Traditional machine learning
