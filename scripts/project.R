@@ -44,6 +44,9 @@ extractFactors <- function (
   h <- data.frame(h)
   row.names(h)[nrow(h)] <- "diagnosis"
   
+  # Writing to train file
+  train <- data.frame(t(h))
+  
   # Writing to external file
   write.csv(w, paste(output.address, "w.csv"), sep = "", row.names = FALSE)
   write.csv(h, paste(output.address, 'h.csv'), sep = "",  row.names = FALSE)
@@ -55,6 +58,8 @@ extractFactors <- function (
   test <- rbind(test, labels[-indices, "diagnosis"])
   test <- data.frame(h)
   row.names(test)[nrow(test)] <- "diagnosis"
+  
+  test <- data.frame(t(test))
   
   returnValues <- list("decomp" = decomp, "w" = w, "h" = h, "train" = train, "test" = test)
   return(returnValues)
