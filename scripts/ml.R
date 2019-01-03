@@ -5,6 +5,7 @@
 # TO DO:
 # Implement machine learning frameworks (KNN, Random Forest, XGBoost, SVM, hierarchical clustering, LogReg)
 # Implement ensemble ML framework
+# Save models as .RDS
 
 # Libraries
 library(caret)
@@ -21,9 +22,22 @@ baseML <- function (
   # Shuffling training set
   train <- train[sample(nrow(train)), ]
   
-  # Random forest
+  # Control parameters
+  controlParameters <- trainControl(
+    method = "LOOCV", #Leave one out cross validation
+    savePrediction = TRUE,
+    classProbs = TRUE
+  )
+  
+  # Models
+  rf <- trainPredict(train, test, method = "rf", controlParameters) # Random forest
+  knn <- trainPredict(train, test, method = "knn", controlParameters) # K-nearest neighbors
+  xgb <- trainPredict(train, test, method = "xgbTree", controlParameters) # XGBoost
+  svm <- trainPredict(train, test, method = "svmRadial", controlParameters) # Support vector machines
+  log <- trainPredict(train, test, method = "glm", controlParameters) # Logistic regression
 }
 
+# General train and predict function. 
 trainPredict <- function (
   train,
   test,
