@@ -68,3 +68,4 @@ nmfTest <- trainingProjectionsObj$test
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
 
 # Traditional machine learning
+baseML(train, test, predictor = "diagnosis", models.output.address)
