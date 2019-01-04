@@ -67,6 +67,53 @@ trainPredict <- function (
   return(returnValues)
 }
 
+# Ensemble function via XGBoost 
+ensemble <- function (
+  rf,
+  knn,
+  xgb,
+  log,
+  svm,
+  train,
+  test,
+  controlParameters) {
+  
+  # Getting predictions on train and test set
+  rfPredictions <- predict(rf, train)
+  knnPredictions <- predict(knn, train)
+  xgbPredictions <- predict(xgb, train)
+  logPredictions <- predict(log, train)
+  svmPredictions <- predict(svm, train)
+  
+  test$rfPredictions <- predict(rf, test)
+  test$knnPredictions <- predict(knn, test)
+  test$xgbPredictions <- predict(xgb, test)
+  test$logPredictions <- predict(log, test)
+  test$svmPredictions <- predict(svm, test)
+  
+  # Combining new training sets 
+  predDF <- data.frame(rfPredictions, knnPredictions, xgbPredictions, logPredictions,
+                       svmPredictions, diagnosis = train$diagnosis)
+  
+  # Training XGB model
+  ensembleModel <- model <- train(diagnosis ~.,
+                                  data = predDF,
+                                  method = "xgb",
+                                  trControl = controlParameters)
+  
+  # Getting accuracies of model
+  ensemblePredict <- predict(ensembleModel, test, type = "prob")
+  confMatrix <- table(predictions = ensemblePredict, actual = test$diagnosis)
+  accuracyMetric <- accuracy(confMatrix)
+  mccMetric <- mcc(confMatrix)
+  
+  # Returning values
+  returnValues <- list("model" = ensembleModel, "predictions" = ensemblePredict, 
+                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric,
+                       "mcc" = mccMetric)
+  return(returnValues)
+}
+
 # Function for accuracy
 accuracyMetric <- function (conMatrix) {
   tp <- conMatrix[1,1]
