@@ -68,3 +68,13 @@ hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfclu
 
 # Traditional machine learning
 baseML(train, test, predictor = "diagnosis", models.output.address)
+
+# NMF machine learning
+#baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf.")) Already trained models
+
+rf <- readRDS(paste(models.output.address, "rf .RDS"))
+knn <- readRDS(paste(models.output.address, "knn .RDS"))
+xgb <- readRDS(paste(models.output.address, "xgbLinear .RDS"))
+svm <- readRDS(paste(models.output.address, "svmRadial .RDS"))
+ensembleModel <- readRDS(paste(models.output.address, "ensemble.RDS"))
+writeData(rf, knn, xgb, svm, ensembleModel, models.output.address)
