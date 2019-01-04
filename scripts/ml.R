@@ -13,7 +13,8 @@ library(caret)
 baseML <- function (
   train, 
   test,
-  predictor) {
+  predictor,
+  model.address) {
   
   # Factorizing predictor
   train[,predictor] <- as.factor(train[,predictor])
@@ -30,11 +31,11 @@ baseML <- function (
   )
   
   # Models
-  rf <- trainPredict(train, test, method = "rf", controlParameters) # Random forest
-  knn <- trainPredict(train, test, method = "knn", controlParameters) # K-nearest neighbors
-  xgb <- trainPredict(train, test, method = "xgbTree", controlParameters) # XGBoost
-  svm <- trainPredict(train, test, method = "svmRadial", controlParameters) # Support vector machines
-  log <- trainPredict(train, test, method = "glm", controlParameters) # Logistic regression
+  rf <- trainPredict(train, test, method = "rf", controlParameters, model.address) # Random forest
+  knn <- trainPredict(train, test, method = "knn", controlParameters, model.address) # K-nearest neighbors
+  xgb <- trainPredict(train, test, method = "xgbTree", controlParameters, model.address) # XGBoost
+  svm <- trainPredict(train, test, method = "svmRadial", controlParameters, model.address) # Support vector machines
+  log <- trainPredict(train, test, method = "glm", controlParameters, model.address) # Logistic regression
 }
 
 # General train and predict function. 
@@ -42,7 +43,8 @@ trainPredict <- function (
   train,
   test,
   method,
-  controlParameters) {
+  controlParameters,
+  model.address) {
   # Training model
   model <- train(diagnosis ~.,
                  data = train,
@@ -58,6 +60,10 @@ trainPredict <- function (
   returnValues <- list("model" = model, "testPredictions" = testPredictions, 
                        "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric,
                        "mcc" = mccMetric)
+  
+  # Writing model
+  saveRDS(model, file = paste(model.address, method,".RDS"))
+  
   return(returnValues)
 }
 
