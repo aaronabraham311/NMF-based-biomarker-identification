@@ -76,6 +76,7 @@ ensemble <- function (
   svm,
   train,
   test,
+  model.address,
   controlParameters) {
   
   # Getting predictions on train and test set
@@ -106,6 +107,9 @@ ensemble <- function (
   confMatrix <- table(predictions = ensemblePredict, actual = test$diagnosis)
   accuracyMetric <- accuracy(confMatrix)
   mccMetric <- mcc(confMatrix)
+  
+  # Writing model
+  saveRDS(model, file = paste(model.address, "ensemble.RDS"))
   
   # Returning values
   returnValues <- list("model" = ensembleModel, "predictions" = ensemblePredict, 
