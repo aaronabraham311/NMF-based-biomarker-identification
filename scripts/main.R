@@ -6,7 +6,6 @@
 
 # Libraries
 library(dplyr)
-library(caret)
 
 # Importing files into main script
 data.cleaning.address <- "scripts/dataClean.R"

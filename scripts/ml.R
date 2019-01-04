@@ -16,27 +16,34 @@ baseML <- function (
   predictor,
   model.address) {
   
+  # Removing ID
+  train$RID <- NULL
+  test$RID <- NULL
+  
   # Factorizing predictor
   train[,predictor] <- as.factor(train[,predictor])
   test[,predictor] <- as.factor(test[,predictor])
+  levels(train$diagnosis) <- make.names(levels(factor(train$diagnosis)))
+  levels(test$diagnosis) <- make.names(levels(factor(test$diagnosis)))
   
   # Shuffling training set
   train <- train[sample(nrow(train)), ]
   
   # Control parameters
   controlParameters <- trainControl(
-    method = "LOOCV", #Leave one out cross validation
+    method = "cv",
+    number = 10, #10 fold cross validation
     savePrediction = TRUE,
-    classProbs = TRUE
+    classProbs = F
   )
   
   # Models
   rf <- trainPredict(train, test, method = "rf", controlParameters, model.address) # Random forest
   knn <- trainPredict(train, test, method = "knn", controlParameters, model.address) # K-nearest neighbors
-  xgb <- trainPredict(train, test, method = "xgbTree", controlParameters, model.address) # XGBoost
+  xgb <- trainPredict(train, test, method = "xgbLinear", controlParameters, model.address) # XGBoost
   svm <- trainPredict(train, test, method = "svmRadial", controlParameters, model.address) # Support vector machines
-  log <- trainPredict(train, test, method = "glm", controlParameters, model.address) # Logistic regression
-  ensembleModel <- ensemble(rf, knn, xgb, log, svm, train, test, model.address, controlParameters) # Ensemble model
+  #ada <- trainPredict(train, test, method = "adaboost", controlParameters, model.address) # Adaboost
+  ensembleModel <- ensemble(rf, knn, xgb, svm, train, test, model.address, controlParameters) # Ensemble model
   
   # Writing data into .txt file
   date.string <- date()
@@ -63,9 +70,9 @@ baseML <- function (
   write.table(c("Support vector machine accuracy" ,svm$accuracy), file = params.file, append = T)
   write.table(c("Support vector machine Matthew's correlation coefficient" ,svm$mcc), file = params.file, append = T)
   
-  write.table(c("Logistic regression confusion matrix" ,log$model), file = params.file, append = T)
-  write.table(c("Logistic regression accuracy" ,log$accuracy), file = params.file, append = T)
-  write.table(c("Logistic regression Matthew's correlation coefficient" ,log$mcc), file = params.file, append = T)
+  #write.table(c("Adaboost confusion matrix" ,ada$model), file = params.file, append = T)
+  #write.table(c("Adaboost accuracy" ,ada$accuracy), file = params.file, append = T)
+  #write.table(c("Adaboost Matthew's correlation coefficient" ,ada$mcc), file = params.file, append = T)
 }
 
 # General train and predict function. 
@@ -99,10 +106,9 @@ trainPredict <- function (
 
 # Ensemble function via XGBoost 
 ensemble <- function (
-  rf,
+  rforest,
   knn,
   xgb,
-  log,
   svm,
   train,
   test,
@@ -110,20 +116,18 @@ ensemble <- function (
   controlParameters) {
   
   # Getting predictions on train and test set
-  rfPredictions <- predict(rf, train)
+  rfPredictions <- predict(rforest, train)
   knnPredictions <- predict(knn, train)
   xgbPredictions <- predict(xgb, train)
-  logPredictions <- predict(log, train)
   svmPredictions <- predict(svm, train)
   
-  test$rfPredictions <- predict(rf, test)
+  test$rfPredictions <- predict(rforest, test)
   test$knnPredictions <- predict(knn, test)
   test$xgbPredictions <- predict(xgb, test)
-  test$logPredictions <- predict(log, test)
   test$svmPredictions <- predict(svm, test)
   
   # Combining new training sets 
-  predDF <- data.frame(rfPredictions, knnPredictions, xgbPredictions, logPredictions,
+  predDF <- data.frame(rfPredictions, knnPredictions, xgbPredictions,
                        svmPredictions, diagnosis = train$diagnosis)
   
   # Training XGB model
@@ -133,7 +137,7 @@ ensemble <- function (
                                   trControl = controlParameters)
   
   # Getting accuracies of model
-  ensemblePredict <- predict(ensembleModel, test, type = "prob")
+  ensemblePredict <- predict(ensembleModel, test)
   confMatrix <- table(predictions = ensemblePredict, actual = test$diagnosis)
   accuracyMetric <- accuracy(confMatrix)
   mccMetric <- mcc(confMatrix)
@@ -149,7 +153,7 @@ ensemble <- function (
 }
 
 # Function for accuracy
-accuracyMetric <- function (conMatrix) {
+accuracy <- function (conMatrix) {
   tp <- conMatrix[1,1]
   fp <- conMatrix[1,2]
   fn <- conMatrix[2,1]
