@@ -27,7 +27,7 @@ hierarchicalClustering <- function(
   # Plotting and changing visuals
   labels(dend) <- data[,labels]
   plot <- dend %>%
-          color_branches(k = 3)
+          color_labels(k = 3)
   
   #Intializing file
   png(filename = paste(output.address, file))
