@@ -64,3 +64,34 @@ extractFactors <- function (
   returnValues <- list("decomp" = decomp, "w" = w, "h" = h, "train" = train, "test" = test)
   return(returnValues)
 }
+
+importantMetabolites <- function (w, k) #ncol represents number of meta-metabolites
+{
+  metaMetabolite <- w
+  metaMetabolite[,"metabolites"] <- rownames(w)
+  
+  meta1 <- subset(metaMetabolite, select = c(X1, metabolites))
+  meta1 <- meta1[order(meta1$X1, decreasing = T),]
+  importantMetabolites1 <- meta1[1:25,"metabolites"] #Extracting 25 most important metabolites
+  
+  meta2 <- subset(metaMetabolite, select = c(X2, metabolites))
+  meta2 <- meta2[order(meta2$X2, decreasing = T), ]
+  importantMetabolites2 <- meta2[1:25,"metabolites"]
+  
+  meta3 <- subset(metaMetabolite, select = c(X3, metabolites))
+  meta3 <- meta3[order(meta2$X3, decreasing = T), ]
+  importantMetabolites3 <- meta3[1:25,"metabolites"]
+  
+  meta4 <- subset(metaMetabolite, select = c(X4, metabolites))
+  meta4 <- meta4[order(meta2$X4, decreasing = T), ]
+  importantMetabolites4 <- meta4[1:25,"metabolites"]
+  
+  meta5 <- subset(metaMetabolite, select = c(X5, metabolites))
+  meta5 <- meta5[order(meta2$X5, decreasing = T), ]
+  importantMetabolites5 <- meta5[1:25,"metabolites"]
+  
+  importantList <- rbind(importantMetabolites1, importantMetabolites2, importantMetabolites3,
+                         importantMetabolites4, importantMetabolites5)
+  importantList <- importantList[unique(importantList$metabolites),]
+  
+}

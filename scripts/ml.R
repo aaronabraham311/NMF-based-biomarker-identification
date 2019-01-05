@@ -43,7 +43,7 @@ baseML <- function (
   xgb <- trainPredict(train, test, method = "xgbLinear", controlParameters, model.address) # XGBoost
   svm <- trainPredict(train, test, method = "svmRadial", controlParameters, model.address) # Support vector machines
   #ada <- trainPredict(train, test, method = "adaboost", controlParameters, model.address) # Adaboost
-  ensembleModel <- ensemble(rf, knn, xgb, svm, train, test, model.address, controlParameters) # Ensemble model
+  ensembleModel <- ensemble(rf$model, knn$model, xgb$model, svm$model, train, test, model.address, controlParameters) # Ensemble model
   
   # Writing data
   writeData(rf, knn, xgb, svm, ensembleModel, model.address)
@@ -128,39 +128,40 @@ ensemble <- function (
 }
 
 writeData <- function (
-  rf,
+  rForest,
   knn,
   xgb,
   svm,
+  ensemble,
   model.address) {
   # Writing data into .txt file
   date.string <- date()
   date.string2 <- paste(unlist(strsplit(date.string, " ")), sep="_", collapse="_")
   date.string3 <- paste(unlist(strsplit(date.string2, ":")), sep="_", collapse="_")
-  params.file <- paste(model.address,".", date.string3, ".results.txt", sep="")
+  params.file <- paste(model.address, date.string3, ".results.txt", sep="")
   
   write(c("Machine Learning Results on ", date.string2), file= params.file, ncolumns=100, append=F)
   write(c("  "), file= params.file, ncolumns=100, append=T)
   
-  write.table(c("Random forest confusion matrix" ,rf$model), file = params.file, append = T)
-  write.table(c("Random forest accuracy" ,rf$accuracy), file = params.file, append = T)
-  write.table(c("Random forest Matthew's correlation coefficient" ,rf$mcc), file = params.file, append = T)
+  write.table(c("Random forest confusion matrix" ,rForest$confusionMatrix), file = params.file, append = T)
+  write.table(c("Random forest accuracy" ,rForest$accuracy), file = params.file, append = T)
+  write.table(c("Random forest Matthew's correlation coefficient" ,rForest$mcc), file = params.file, append = T)
   
-  write.table(c("K-nearest neighbors confusion matrix" ,knn$model), file = params.file, append = T)
+  write.table(c("K-nearest neighbors confusion matrix" ,knn$confusionMatrix), file = params.file, append = T)
   write.table(c("K-nearest neighbors accuracy" , knn$accuracy), file = params.file, append = T)
   write.table(c("K-nearest neighbors Matthew's correlation coefficient" ,knn$mcc), file = params.file, append = T)
   
-  write.table(c("XGBoost confusion matrix" ,xgb$model), file = params.file, append = T)
+  write.table(c("XGBoost confusion matrix" ,xgb$confusionMatrix), file = params.file, append = T)
   write.table(c("XGBoost accuracy" ,xgb$accuracy), file = params.file, append = T)
   write.table(c("XGBoost Matthew's correlation coefficient" ,xgb$mcc), file = params.file, append = T)
   
-  write.table(c("Support vector machine confusion matrix" ,svm$model), file = params.file, append = T)
+  write.table(c("Support vector machine confusion matrix" ,svm$confusionMatrix), file = params.file, append = T)
   write.table(c("Support vector machine accuracy" ,svm$accuracy), file = params.file, append = T)
   write.table(c("Support vector machine Matthew's correlation coefficient" ,svm$mcc), file = params.file, append = T)
   
-  #write.table(c("Adaboost confusion matrix" ,ada$model), file = params.file, append = T)
-  #write.table(c("Adaboost accuracy" ,ada$accuracy), file = params.file, append = T)
-  #write.table(c("Adaboost Matthew's correlation coefficient" ,ada$mcc), file = params.file, append = T)
+  write.table(c("Ensemble confusion matrix" ,ensemble$confusionMatrix), file = params.file, append = T)
+  write.table(c("Ensemble accuracy" ,ensemble$accuracy), file = params.file, append = T)
+  write.table(c("Ensemble Matthew's correlation coefficient" ,ensemble$mcc), file = params.file, append = T)
 }
 
 # Function for accuracy

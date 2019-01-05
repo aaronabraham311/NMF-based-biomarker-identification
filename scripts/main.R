@@ -70,7 +70,7 @@ hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfclu
 baseML(train, test, predictor = "diagnosis", models.output.address)
 
 # NMF machine learning
-#baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf.")) Already trained models
+baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
 
 rf <- readRDS(paste(models.output.address, "rf .RDS"))
 knn <- readRDS(paste(models.output.address, "knn .RDS"))
