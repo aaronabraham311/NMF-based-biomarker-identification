@@ -70,9 +70,10 @@ importantMetabolites <- function (w, k) #ncol represents number of meta-metaboli
   metaMetabolite <- w
   metaMetabolite[,"metabolites"] <- rownames(w)
   
+  ##Extracting 25 most important metabolites for each metagene
   meta1 <- subset(metaMetabolite, select = c(X1, metabolites))
   meta1 <- meta1[order(meta1$X1, decreasing = T),]
-  importantMetabolites1 <- meta1[1:25,"metabolites"] #Extracting 25 most important metabolites
+  importantMetabolites1 <- meta1[1:25,"metabolites"] 
   
   meta2 <- subset(metaMetabolite, select = c(X2, metabolites))
   meta2 <- meta2[order(meta2$X2, decreasing = T), ]
@@ -90,8 +91,10 @@ importantMetabolites <- function (w, k) #ncol represents number of meta-metaboli
   meta5 <- meta5[order(meta5$X5, decreasing = T), ]
   importantMetabolites5 <- meta5[1:25, "metabolites"]
 
-  importantList <- do.call(c, importantMetabolites1, importantMetabolites2, importantMetabolites3,
-                           importantMetabolites4, importantMetabolites5)
+  # Finding all unique metabolites
+  importantList <- do.call(c, list( importantMetabolites1, importantMetabolites2, importantMetabolites3,
+                           importantMetabolites4, importantMetabolites5))
+  importantList <- unique(importantList)
   
   return(importantList)
 }

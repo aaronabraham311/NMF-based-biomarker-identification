@@ -7,6 +7,8 @@
 # Libraries
 library(dplyr)
 
+set.seed(123)
+
 # Importing files into main script
 data.cleaning.address <- "scripts/dataClean.R"
 data.handling.address <- "scripts/handle.R"
@@ -35,7 +37,7 @@ columnRemoval <- c(1,3,4,5) # Array of columns to remove. NA otherwise
 ceiling <- 100000
 threshold <- 0
 nonScaleColumns <- c("rid", "diagnosis")
-k <- 3
+k <- 5
 labels <- "diagnosis"
 
 ## Calling functions
@@ -58,6 +60,9 @@ test <- handledData[-indices,]
 trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices, k)
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
+
+# Most important metabolites
+importantNMF <- importantMetabolites(w)
 
 # NMF train and test dataset
 nmfTrain <- trainingProjectionsObj$train
