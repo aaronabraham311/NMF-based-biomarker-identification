@@ -47,7 +47,8 @@ baseML <- function (
   
   # Writing data
   writeData(rf, knn, xgb, svm, ensembleModel, model.address)
-  return (rf, knn, xgb, svm, ensembleModel)
+  returnValues <- c(rf, knn, xgb, svm, ensembleModel)
+  return (returnValues)
 }
 
 # General train and predict function. 
@@ -67,11 +68,9 @@ trainPredict <- function (
   testPredictions <- predict(model, test) # Could use probabilities
   confMatrix <- table(predictions = testPredictions, actual = test$diagnosis)
   accuracyMetric <- accuracy(confMatrix)
-  mccMetric <- mcc(confMatrix)
   
   returnValues <- list("model" = model, "testPredictions" = testPredictions, 
-                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric,
-                       "mcc" = mccMetric)
+                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric)
   
   # Writing model
   saveRDS(model, file = paste(model.address, method,".RDS"))
@@ -115,15 +114,13 @@ ensemble <- function (
   ensemblePredict <- predict(ensembleModel, test)
   confMatrix <- table(predictions = ensemblePredict, actual = test$diagnosis)
   accuracyMetric <- accuracy(confMatrix)
-  mccMetric <- mcc(confMatrix)
   
   # Writing model
   saveRDS(model, file = paste(model.address, "ensemble.RDS"))
   
   # Returning values
   returnValues <- list("model" = ensembleModel, "predictions" = ensemblePredict, 
-                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric,
-                       "mcc" = mccMetric)
+                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric)
   return(returnValues)
 }
 
@@ -145,23 +142,19 @@ writeData <- function (
   
   write.table(c("Random forest confusion matrix" ,rForest$confusionMatrix), file = params.file, append = T)
   write.table(c("Random forest accuracy" ,rForest$accuracy), file = params.file, append = T)
-  write.table(c("Random forest Matthew's correlation coefficient" ,rForest$mcc), file = params.file, append = T)
   
   write.table(c("K-nearest neighbors confusion matrix" ,knn$confusionMatrix), file = params.file, append = T)
   write.table(c("K-nearest neighbors accuracy" , knn$accuracy), file = params.file, append = T)
-  write.table(c("K-nearest neighbors Matthew's correlation coefficient" ,knn$mcc), file = params.file, append = T)
   
   write.table(c("XGBoost confusion matrix" ,xgb$confusionMatrix), file = params.file, append = T)
   write.table(c("XGBoost accuracy" ,xgb$accuracy), file = params.file, append = T)
-  write.table(c("XGBoost Matthew's correlation coefficient" ,xgb$mcc), file = params.file, append = T)
   
   write.table(c("Support vector machine confusion matrix" ,svm$confusionMatrix), file = params.file, append = T)
   write.table(c("Support vector machine accuracy" ,svm$accuracy), file = params.file, append = T)
-  write.table(c("Support vector machine Matthew's correlation coefficient" ,svm$mcc), file = params.file, append = T)
   
   write.table(c("Ensemble confusion matrix" ,ensemble$confusionMatrix), file = params.file, append = T)
   write.table(c("Ensemble accuracy" ,ensemble$accuracy), file = params.file, append = T)
-  write.table(c("Ensemble Matthew's correlation coefficient" ,ensemble$mcc), file = params.file, append = T)
+  
 }
 
 # Function for accuracy
@@ -171,15 +164,4 @@ accuracy <- function (conMatrix) {
   
   accuracy <- tp/total
   return(accuracy)
-}
-
-# Function for Matthew's correlation coefficient
-mcc <- function(conMatrix) {
-  tp <- conMatrix[1,1]
-  fp <- conMatrix[1,2]
-  fn <- conMatrix[2,1]
-  tn <- conMatrix[2,2]
-  
-  metric <- ((tp * tn) - (fp * fn))/(sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)))
-  return(metric)
 }
