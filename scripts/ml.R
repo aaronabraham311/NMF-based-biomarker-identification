@@ -166,12 +166,10 @@ writeData <- function (
 
 # Function for accuracy
 accuracy <- function (conMatrix) {
-  tp <- conMatrix[1,1]
-  fp <- conMatrix[1,2]
-  fn <- conMatrix[2,1]
-  tn <- conMatrix[2,2]
+  tp <- conMatrix[1,1] + conMatrix[2,2] + conMatrix[3,3]
+  total <- sum(conMatrix)
   
-  accuracy <- (tp + tn)/(tp + fp + fn + tn)
+  accuracy <- tp/total
   return(accuracy)
 }
 
