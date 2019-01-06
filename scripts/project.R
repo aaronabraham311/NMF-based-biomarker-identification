@@ -76,23 +76,22 @@ importantMetabolites <- function (w, k) #ncol represents number of meta-metaboli
   
   meta2 <- subset(metaMetabolite, select = c(X2, metabolites))
   meta2 <- meta2[order(meta2$X2, decreasing = T), ]
-  importantMetabolites2 <- meta2[1:25,"metabolites"]
+  importantMetabolites2 <- meta2[1:25, "metabolites"]
   
   meta3 <- subset(metaMetabolite, select = c(X3, metabolites))
   meta3 <- meta3[order(meta3$X3, decreasing = T), ]
-  importantMetabolites3 <- meta3[1:25,"metabolites"]
+  importantMetabolites3 <- meta3[1:25, "metabolites"]
   
   meta4 <- subset(metaMetabolite, select = c(X4, metabolites))
   meta4 <- meta4[order(meta4$X4, decreasing = T), ]
-  importantMetabolites4 <- meta4[1:25,"metabolites"]
+  importantMetabolites4 <- meta4[1:25, "metabolites"]
   
   meta5 <- subset(metaMetabolite, select = c(X5, metabolites))
   meta5 <- meta5[order(meta5$X5, decreasing = T), ]
-  importantMetabolites5 <- meta5[1:25,"metabolites"]
-  
-  importantList <- rbind(importantMetabolites1, importantMetabolites2, importantMetabolites3,
-                         importantMetabolites4, importantMetabolites5)
-  importantList <- importantList[unique(importantList$metabolites),]
+  importantMetabolites5 <- meta5[1:25, "metabolites"]
+
+  importantList <- do.call(c, importantMetabolites1, importantMetabolites2, importantMetabolites3,
+                           importantMetabolites4, importantMetabolites5)
   
   return(importantList)
 }
