@@ -77,8 +77,14 @@ traditionalModels <- baseML(train, test, predictor = "diagnosis", models.output.
 # NMF machine learning
 baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
 
-rf <- readRDS(paste(models.output.address, "rf .RDS"))
-knn <- readRDS(paste(models.output.address, "knn .RDS"))
-xgb <- readRDS(paste(models.output.address, "xgbLinear .RDS"))
-svm <- readRDS(paste(models.output.address, "svmRadial .RDS"))
-ensembleModel <- readRDS(paste(models.output.address, "ensemble.RDS"))
+normalRf <- readRDS(paste(models.output.address, "rf .RDS"))
+normalKnn <- readRDS(paste(models.output.address, "knn .RDS"))
+normalXgb <- readRDS(paste(models.output.address, "xgbLinear .RDS"))
+normalSvm <- readRDS(paste(models.output.address, "svmRadial .RDS"))
+normalEnsembleModel <- readRDS(paste(models.output.address, "ensemble.RDS"))
+
+nmfRf <- readRDS(paste(models.output.address, "nmf. rf .RDS"))
+nmfKnn <- readRDS(paste(models.output.address, "nmf. knn .RDS"))
+nmfXgb <- readRDS(paste(models.output.address, "nmf. xgbLinear .RDS"))
+nmfSvm <- readRDS(paste(models.output.address, "nmf. svmRadial .RDS"))
+nmfEnsembleModel <- readRDS(paste(models.output.address, "nmf. ensemble.RDS"))
