@@ -3,7 +3,13 @@
 # Date: November 13, 2018
 
 # Statistics to do:
-# 1. Extract most important features from NMF projection
-# 2. Order top metabolites and perform t-test against AD and control 
+# 2. Perform ANOVA
 # 3. Visualize top metabolites using violin plots
-# 4. Investigate ANOVA and MANOVA
+
+metaboliteANOVA <- function (metabolite, data) {
+  metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
+  metaboliteData <- metaboliteData %>% group_by(diagnosis)
+  
+  anova_results <- aov(diagnosis ~ metabolite, data = metaboliteData)
+  pVal <- summary(anova_results)[[1]][["Pr(>F)"]]
+}
