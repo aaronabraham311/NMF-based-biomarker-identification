@@ -5,9 +5,11 @@
 statisticsMain <- function(metaboliteList, data, output.address) {
   print (c("Running ANOVA and Mann-Whitney tests to be outputted at: ", output.address))
   
-  ad_control_data <- data %>% filter(diagnosis == "1" & diagnosis == "3")
-  ad_mci_data <- data %>% filter(diagnosis == "2" & diagnosis == "3")
-  mci_control_data <- data %>% filter(diagnosis == "1" & diagnosis == "2")
+  data$diagnosis <- as.factor(data$diagnosis)
+  
+  ad_control_data <- data %>% filter(diagnosis != 2)
+  ad_mci_data <- data %>% filter(diagnosis != 1)
+  mci_control_data <- data %>% filter(diagnosis != 3)
   
   # Writing date into output filename
   date.string <- date()
@@ -34,7 +36,6 @@ statisticsMain <- function(metaboliteList, data, output.address) {
 metaboliteANOVA <- function (metabolite, data) {
   metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
   metaboliteData <- metaboliteData[order(metaboliteData$diagnosis), ]
-  metaboliteData$diagnosis <- factor(metaboliteData$diagnosis)
   
   colnames(metaboliteData) <- c("metabolite", "diagnosis")
   
@@ -45,7 +46,15 @@ metaboliteANOVA <- function (metabolite, data) {
 }
 
 metaboliteMW <- function (metabolite, data) {
-  mannWhitney_results <- wilcox.test(diagnosis ~ metabolite, data = data)
+  metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
+  diagnosisLevels <- levels(metaboliteData$diagnosis)
+  
+  type1 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[1])
+  type2 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[2])
+  
+  mwData <- data.frame(type1)
+  
+  mannWhitney_results <- wilcox.test(metabolite ~ diagnosis, data = data)
   pVal <- mannWhitney_results$p.value
   
   return(pVal)
