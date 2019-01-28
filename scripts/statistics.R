@@ -5,9 +5,9 @@
 statisticsMain <- function(metaboliteList, data, output.address) {
   print (c("Running ANOVA and Mann-Whitney tests to be outputted at: ", output.address))
   
-  ad_control_data <- data %>% select(diagnosis == "1" && diagnosis == "3")
-  ad_mci_data <- data %>% select(diagnosis == "2" && diagnosis == "3")
-  mci_control_data <- data %>% select (diagnosis == "1" && diagnosis == "2")
+  ad_control_data <- data %>% filter(diagnosis == "1" & diagnosis == "3")
+  ad_mci_data <- data %>% filter(diagnosis == "2" & diagnosis == "3")
+  mci_control_data <- data %>% filter(diagnosis == "1" & diagnosis == "2")
   
   # Writing date into output filename
   date.string <- date()
