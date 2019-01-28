@@ -2,11 +2,6 @@
 # Author: Aaron Abraham
 # Date: November 13, 2018
 
-# Statistics to do:
-# 1. Perform ANOVA
-# 2. Perform t-test for Control vs. AD, MCI vs. AD and Control vs AD
-# 3. Visualize top metabolites using violin plots
-
 statisticsMain <- function(metaboliteList, data, output.address) {
   print (c("Running ANOVA and Mann-Whitney tests to be outputted at: ", output.address))
   

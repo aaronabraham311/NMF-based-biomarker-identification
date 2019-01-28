@@ -30,6 +30,7 @@ key.address <- "./data/raw/DXSUM_PDXCONV_ADNIALL.csv"
 data.output.address <- "./data/cleaned/"
 visualizations.output.address <- "./visuals/"
 models.output.address <- "./models/"
+stats.output.address <- "./statistics/"
 
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
@@ -61,8 +62,9 @@ trainingProjectionsObj <- extractFactors(handledData, data.output.address, indic
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 
-# Most important metabolites
+# Most important metabolites and statistics
 importantNMF <- importantMetabolites(w)
+statisticsMain(importantNMF, handledData, stats.output.address)
 
 # NMF train and test dataset
 nmfTrain <- trainingProjectionsObj$train
