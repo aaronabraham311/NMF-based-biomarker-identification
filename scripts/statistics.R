@@ -42,4 +42,13 @@ metaboliteANOVA <- function (metabolite, data) {
   
   anova_results <- aov(diagnosis ~ metabolite, data = metaboliteData)
   pVal <- summary(anova_results)[[1]][["Pr(>F)"]]
+  
+  return(pVal)
+}
+
+metaboliteMW <- function (metabolite, data) {
+  mannWhitney_results <- wilcox.test(diagnosis ~ metabolite, data = data)
+  pVal <- mannWhitney_results$p.value
+  
+  return(pVal)
 }
