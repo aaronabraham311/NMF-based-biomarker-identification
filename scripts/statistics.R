@@ -13,7 +13,7 @@ statisticsMain <- function(metaboliteList, data, output.address) {
   date.string <- date()
   date.string2 <- paste(unlist(strsplit(date.string, " ")), sep="_", collapse="_")
   date.string3 <- paste(unlist(strsplit(date.string2, ":")), sep="_", collapse="_")
-  params.file <- paste(model.address, date.string3, ".statistics.txt", sep="")
+  params.file <- paste(output.address, date.string3, ".statistics.txt", sep="")
   
   write(c("Statistics on ", date.string2), file= params.file, ncolumns=100, append=F)
   write(c("  "), file= params.file, ncolumns=100, append=T)
@@ -33,12 +33,15 @@ statisticsMain <- function(metaboliteList, data, output.address) {
 
 metaboliteANOVA <- function (metabolite, data) {
   metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
-  metaboliteData <- metaboliteData %>% group_by(diagnosis)
+  metaboliteData <- metaboliteData[order(metaboliteData$diagnosis), ]
+  metaboliteData$diagnosis <- factor(metaboliteData$diagnosis)
   
-  anova_results <- aov(diagnosis ~ metabolite, data = metaboliteData)
-  pVal <- summary(anova_results)[[1]][["Pr(>F)"]]
+  colnames(metaboliteData) <- c("metabolite", "diagnosis")
   
-  return(pVal)
+  anv <- aov(metabolite ~ diagnosis, data = metaboliteData)
+  pVal <- summary(anv)[[1]][["Pr(>F)"]]
+  
+  return(pVal[1])
 }
 
 metaboliteMW <- function (metabolite, data) {
