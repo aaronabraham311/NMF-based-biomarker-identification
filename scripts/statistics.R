@@ -45,16 +45,16 @@ metaboliteANOVA <- function (metabolite, data) {
   return(pVal[1])
 }
 
-metaboliteMW <- function (metabolite, data) {
+metaboliteMW <- function (metabolite, data, col1, col2) {
   metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
   diagnosisLevels <- levels(metaboliteData$diagnosis)
   
-  type1 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[1])
-  type2 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[2])
+  type1 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[col1])
+  type2 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[col2])
   
-  mwData <- data.frame(type1)
+  mwData <- data.frame(type1, type2)
   
-  mannWhitney_results <- wilcox.test(metabolite ~ diagnosis, data = data)
+  mannWhitney_results <- wilcox.test(metabolite ~ diagnosis, data = mwData)
   pVal <- mannWhitney_results$p.value
   
   return(pVal)
