@@ -22,9 +22,9 @@ statisticsMain <- function(metaboliteList, data, output.address) {
   
   for(i in metaboliteList) {
     pANOVA <- metaboliteANOVA(i, data)
-    pMannWhitney_AD_Control <- metaboliteMW(i, ad_control_data)
-    pMannWhitney_AD_MCI <- metaboliteMW(i, ad_mci_data)
-    pMannWhitney_MCI_Conrtol <- metaboliteMW(i, mci_control_data)
+    pMannWhitney_AD_Control <- metaboliteMW(i, data, 2)
+    pMannWhitney_AD_MCI <- metaboliteMW(i, data, 1)
+    pMannWhitney_MCI_Conrtol <- metaboliteMW(i, data, 3)
     
     write.table(c(i, " ANOVA Result: ", pANOVA), file = params.file, append = T)
     write.table(c(i, " MW AD and Control Result: ", pMannWhitney_AD_Control), file = params.file, append = T)
@@ -45,16 +45,13 @@ metaboliteANOVA <- function (metabolite, data) {
   return(pVal[1])
 }
 
-metaboliteMW <- function (metabolite, data, col1, col2) {
+metaboliteMW <- function (metabolite, data, noDiagnosisLevel) {
   metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
-  diagnosisLevels <- levels(metaboliteData$diagnosis)
   
-  type1 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[col1])
-  type2 <- metaboliteData %>% filter(diagnosis == diagnosisLevels[col2])
+  mwData <- metaboliteData %>% filter(diagnosis != noDiagnosisLevel)
+  mwData$diagnosis <- as.factor(mwData$diagnosis)
   
-  mwData <- data.frame(type1, type2)
-  
-  mannWhitney_results <- wilcox.test(metabolite ~ diagnosis, data = mwData)
+  mannWhitney_results <- wilcox.test(mwData[,metabolite] ~ mwData$diagnosis, data = mwData)
   pVal <- mannWhitney_results$p.value
   
   return(pVal)
