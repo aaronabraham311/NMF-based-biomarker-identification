@@ -2,6 +2,8 @@
 # Author: Aaron Abraham
 # Date: November 13, 2018
 
+# REPLACE MANN WHITNEY WITH TUKEY ANALYSIS
+
 statisticsMain <- function(metaboliteList, data, output.address) {
   print (c("Running ANOVA and Mann-Whitney tests to be outputted at: ", output.address))
   
@@ -43,6 +45,12 @@ metaboliteANOVA <- function (metabolite, data) {
   pVal <- summary(anv)[[1]][["Pr(>F)"]]
   
   return(pVal[1])
+}
+
+metaboliteTukey <- function (anv, data) {
+  tukeyModel <- TukeyHSD(anv, which = "diagnosis", conf.level = 0.95)
+  result <- tukeyModel$diagnosis
+  
 }
 
 metaboliteMW <- function (metabolite, data, noDiagnosisLevel) {
