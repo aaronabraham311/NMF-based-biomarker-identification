@@ -37,6 +37,7 @@ statisticsMain <- function(metaboliteList, data, output.address) {
 
 metaboliteANOVA <- function (metabolite, data) {
   metaboliteData <- data %>% dplyr::select(metabolite, diagnosis)
+  metaboliteData$diagnosis <- as.factor(metaboliteData$diagnosis)
   metaboliteData <- metaboliteData[order(metaboliteData$diagnosis), ]
   
   colnames(metaboliteData) <- c("metabolite", "diagnosis")
