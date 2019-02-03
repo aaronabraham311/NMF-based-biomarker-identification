@@ -37,3 +37,13 @@ hierarchicalClustering <- function(
   #Saving plot
   dev.off()
 }
+
+metaboliteViolinplot <- function (data, metabolite, title, output.address)
+{
+  data$diagnosis <- as.factor(data$diagnosis)
+  levels(data$diagnosis) <- c("Control", "MCI", "AD")
+  ggplot(data, aes(x = diagnosis, y = metabolite, fill = diagnosis)) +
+    geom_violin(draw_quantiles = TRUE) +
+    geom_boxplot(width = 0.1) + 
+    labs(title = c(metabolite, " concentrations among AD, MCI, and Control"))
+}
