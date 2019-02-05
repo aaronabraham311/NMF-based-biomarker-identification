@@ -43,6 +43,6 @@ metaboliteBoxplot <- function (data, metabolite, title, ylab, output.address)
   data$diagnosis <- as.factor(data$diagnosis)
   levels(data$diagnosis) <- c("Control", "MCI", "AD")
   boxplot(data[,metabolite] ~ data$diagnosis, data = data, main = title, 
-                   col = c("powderblue", "mistyrose", "darkslategray"),
+                   col = c("lightgreen", "lightblue", "red3"),
                    ylab = metabolite)
 }
