@@ -65,6 +65,28 @@ extractFactors <- function (
   return(returnValues)
 }
 
+pcaProject <- function(data, output.address, indices, k)
+{
+  print(c("Running pcaProject function on "), output.address)
+  
+  # Transpose of matrix for factorization
+  data <- data.matrix(data)
+  row.names(data) <- data[,"RID"]
+  labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in NMF
+  metaboliteData <- subset(data, select = -c(RID, diagnosis))
+  
+  # Removing columns with constant variance
+  metaboliteData <- metaboliteData[ , apply(metaboliteData, 2, var) != 0]
+  
+  pca.train <- metaboliteData[indices,]
+  pca.test <- metaboliteData[-indices,]
+  
+  pca_comp <- prcomp(pca.train, scale. = TRUE) 
+  
+  # Continue from here: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
+  
+}
+
 importantMetabolites <- function (w, k) #ncol represents number of meta-metabolites
 {
   metaMetabolite <- w

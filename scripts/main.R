@@ -64,9 +64,11 @@ trainingProjectionsObj <- extractFactors(handledData, data.output.address, indic
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 
+pcaProjectionObj <- pcaProject(handledData, data.output.address, indices, k)
+
 # Most important metabolites and statistics
 importantNMF <- importantMetabolites(w)
-statisticsMain(importantNMF, handledData, stats.output.address)
+#statisticsMain(importantNMF, handledData, stats.output.address)
 
 # NMF train and test dataset
 nmfTrain <- trainingProjectionsObj$train
