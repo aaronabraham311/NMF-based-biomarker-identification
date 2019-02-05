@@ -51,6 +51,13 @@ baseML <- function (
   return (returnValues)
 }
 
+linearDiscriminantAnalysis <- function (data, classify)
+{
+  data$classify <- as.factor(data$classify)
+  
+  model <- lda(classify ~ ., data = data)
+}
+
 # General train and predict function. 
 trainPredict <- function (
   train,
