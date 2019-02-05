@@ -38,11 +38,17 @@ hierarchicalClustering <- function(
   dev.off()
 }
 
-metaboliteBoxplot <- function (data, metabolite, title, ylab, output.address)
+metaboliteBoxplot <- function (data, metabolite, title, output.address)
 {
+  #Initalizing file 
+  png(filename = paste(output.address, metabolite))
+  
   data$diagnosis <- as.factor(data$diagnosis)
   levels(data$diagnosis) <- c("Control", "MCI", "AD")
   boxplot(data[,metabolite] ~ data$diagnosis, data = data, main = title, 
                    col = c("lightgreen", "lightblue", "red3"),
                    ylab = metabolite)
+  
+  # Saving plot
+  dev.off()
 }

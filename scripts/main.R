@@ -32,6 +32,7 @@ data.output.address <- "./data/cleaned/"
 visualizations.output.address <- "./visuals/"
 models.output.address <- "./models/"
 stats.output.address <- "./statistics/"
+boxplot.output.address <- "./visuals/boxplots/"
 
 # Parameters for this run:
 #rowRemoval <- "" # Array of rows to remove. NA otherwise
