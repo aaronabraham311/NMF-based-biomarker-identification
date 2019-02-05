@@ -82,6 +82,14 @@ pcaProject <- function(data, output.address, indices, k)
   pca.test <- metaboliteData[-indices,]
   
   pca_comp <- prcomp(pca.train, scale. = TRUE) 
+  components <- pca_comp$rotation #Getting number of PVA components
+  
+  std_dev <- pca_comp$sdev
+  variance <- std_dev^2
+  prop_var_exp <- variance/(sum(variance))
+  
+  returnValues <- c(pca_comp, components, prop_var_exp)
+  return(returnValues)
   
   # Continue from here: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
   
