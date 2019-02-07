@@ -51,11 +51,42 @@ baseML <- function (
   return (returnValues)
 }
 
-linearDiscriminantAnalysis <- function (data, classify)
+linearDiscriminantAnalysis <- function (train, test, output.address)
 {
-  data$classify <- as.factor(data$classify)
+  # Data clean
+  data <- data.matrix(data)
+  row.names(data) <- data[,"RID"]
+  data$diagnosis <- as.factor(data$diagnosis)
   
-  model <- lda(classify ~ ., data = data)
+  # Normality
+  data <- apply(data[-c(RID,diagnosis),], 2, scale) # Scaling all variables except RID and diagnosis
+  
+  # LDA construction
+  model <- lda(formula = diagnosis ~ ., data = train, CV = TRUE)
+  
+  # Secondary stats
+  prop = model$svd^2/sum(model$svd^2) # Propoprtion of between-class variance explained
+  
+  # LDA test
+  testPredictions <- predict(model, test)
+  confMatrix <- table(predictions = testPredictions, actual = test$diagnosis)
+  accuracyMetric <- accuracy(confMatrix)
+  
+  # Writing data into .txt file
+  date.string <- date()
+  date.string2 <- paste(unlist(strsplit(date.string, " ")), sep="_", collapse="_")
+  date.string3 <- paste(unlist(strsplit(date.string2, ":")), sep="_", collapse="_")
+  params.file <- paste(model.address, date.string3, ".lda.results.txt", sep="")
+
+  write(c("Linear Discriminant Analysis Results on ", date.string2), file= params.file, ncolumns=100, append=F)
+  write(c("  "), file= params.file, ncolumns=100, append=T)
+  
+  write.table(c("Confusion matrix" ,rForest$confusionMatrix), file = params.file, append = T)
+  write.table(c("Accuracy" ,rForest$accuracy), file = params.file, append = T)
+  
+  returnValues <- list("model" = model, "testPredictions" = testPredictions, 
+                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric, "prop_explained" = prop)
+  return(returnValues)
 }
 
 # General train and predict function. 
