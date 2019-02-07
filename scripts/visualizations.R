@@ -5,6 +5,7 @@
 # TO DO:
 # Hierarchical clustering
 # Violin plots of certain variables
+# PCA and LDA visualizations: https://gist.github.com/thigm85/8424654
 # SHAP
 # Heatmaps
 

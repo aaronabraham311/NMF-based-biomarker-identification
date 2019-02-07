@@ -84,11 +84,18 @@ pcaProject <- function(data, output.address, indices, k)
   pca_comp <- prcomp(pca.train, scale. = TRUE) 
   components <- pca_comp$rotation #Getting number of PVA components
   
+  # Statistics
   std_dev <- pca_comp$sdev
   variance <- std_dev^2
   prop_var_exp <- variance/(sum(variance))
   
-  returnValues <- c(pca_comp, components, prop_var_exp)
+  # Transforming train and test data into principal components
+  pca.transformed.train <- pca_comp$x
+  pca.transformed.test <- scale(pca.test, pca_comp$center, pca_comp$scale) %*% pca_comp$rotation
+  
+  returnValues <- list("pca_model" = pca_comp, "components" = components, 
+                       "variance_explained" = prop_var_exp, "trans_train" = pca.transformed.train,
+                       "trans_test" = pca.transformed.test)
   return(returnValues)
   
   # Continue from here: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
