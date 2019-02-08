@@ -59,11 +59,12 @@ indices <- createDataPartition(handledData$RID, p = 0.7, list = FALSE) # Setting
 train <- handledData[indices,]
 test <- handledData[-indices,]
 
-# Projection creation
+# NMF Projection creation
 trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices, k)
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 
+# PCA Projection creation
 pcaProjectionObj <- pcaProject(handledData, data.output.address, indices, k)
 
 # Most important metabolites and statistics
@@ -74,6 +75,10 @@ importantNMF <- importantMetabolites(w)
 nmfTrain <- trainingProjectionsObj$train
 nmfTest <- trainingProjectionsObj$test
 
+# PCA train and test dataset
+pcaTrain <- pcaProjectionObj$trans_train
+pcaTest <- pcaProjectionObj$trans_test
+
 # Hierarchical clustering
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
 
@@ -82,6 +87,12 @@ traditionalModels <- baseML(train, test, predictor = "diagnosis", models.output.
 
 # NMF machine learning
 baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
+
+# PCA machine learning
+baseML(pcaTrain, pcaTest, predictor = "diagnosis", past(models.output.address, "pca."))
+
+# LDA machine learning
+linearDi
 
 normalRf <- readRDS(paste(models.output.address, "rf .RDS"))
 normalKnn <- readRDS(paste(models.output.address, "knn .RDS"))

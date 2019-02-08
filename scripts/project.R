@@ -76,7 +76,7 @@ pcaProject <- function(data, output.address, indices, k)
   metaboliteData <- subset(data, select = -c(RID, diagnosis))
   
   # Removing columns with constant variance
-  metaboliteData <- metaboliteData[ , apply(metaboliteData, 2, var) != 0]
+  metaboliteData <- metaboliteData[,apply(metaboliteData, 2, var) != 0]
   
   pca.train <- metaboliteData[indices,]
   pca.test <- metaboliteData[-indices,]
