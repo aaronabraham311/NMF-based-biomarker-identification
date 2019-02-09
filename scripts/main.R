@@ -67,6 +67,9 @@ h <- trainingProjectionsObj$h
 # PCA Projection creation
 pcaProjectionObj <- pcaProject(handledData, data.output.address, indices, k)
 
+# tSNE projection creation
+tsneProjectionObj <- tSNEProject(handledData, data.output.address, indices, k)
+
 # Most important metabolites and statistics
 importantNMF <- importantMetabolites(w)
 #statisticsMain(importantNMF, handledData, stats.output.address)
@@ -79,6 +82,10 @@ nmfTest <- trainingProjectionsObj$test
 pcaTrain <- pcaProjectionObj$trans_train
 pcaTest <- pcaProjectionObj$trans_test
 
+# tSNE train and test dataset
+tsneTrain <- tsneProjectionObj$train
+tsneTest <- tsneProjectionObj$test
+
 # Hierarchical clustering
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
 
@@ -89,10 +96,10 @@ traditionalModels <- baseML(train, test, predictor = "diagnosis", models.output.
 baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
 
 # PCA machine learning
-baseML(pcaTrain, pcaTest, predictor = "diagnosis", past(models.output.address, "pca."))
+baseML(pcaTrain, pcaTest, predictor = "diagnosis", paste(models.output.address, "pca."))
 
-# LDA machine learning
-linearDi
+# tSNE machine learning
+baseML(tsneTrain, tsneTest, predictor = "diagnosis", paste(models.output.address, "tsne."))
 
 normalRf <- readRDS(paste(models.output.address, "rf .RDS"))
 normalKnn <- readRDS(paste(models.output.address, "knn .RDS"))

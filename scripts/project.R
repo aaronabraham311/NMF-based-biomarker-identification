@@ -110,9 +110,24 @@ pcaProject <- function(data, output.address, indices, k)
   
 }
 
-tSNEProject <- function(data, output.address, indices, k)
+# https://www.analyticsvidhya.com/blog/2017/01/t-sne-implementation-r-python/
+tSNEProject <- function(data, output.address, indices, k) # Problem: data leakage, extremely high accuracy
 {
+  # Transpose of matrix for factorization
+  data <- data.matrix(data)
+  row.names(data) <- data[,"RID"]
+  labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in PCA
+  metaboliteData <- subset(data, select = -c(RID, diagnosis))
   
+  model <- Rtsne(metaboliteData)
+  
+  # Splitting into training and testing
+  all_data <- cbind(metaboliteData, model$Y, labels[,"diagnosis"])
+  tsne.train <- all_data[indices,]
+  tsne.test <- all_data[-indices,]
+  
+  returnValues <- list("train" = tsne.train, "test" = tsne.test)
+  return(returnValues)
 }
 
 importantMetabolites <- function (w, k) #ncol represents number of meta-metabolites
