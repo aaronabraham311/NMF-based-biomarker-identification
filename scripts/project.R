@@ -101,6 +101,10 @@ pcaProject <- function(data, output.address, indices, k)
   pca.transformed.test <- data.frame(pca.transformed.test)
   row.names(pca.transformed.test)[nrow(pca.transformed.test)] <- "diagnosis"
   
+  # Writing data 
+  write.csv(pca.transformed.train, paste(output.address, "train.csv"), sep = "", row.names = FALSE)
+  write.csv(pca.transformed.test, paste(output.address, 'test.csv'), sep = "",  row.names = FALSE)
+  
   returnValues <- list("pca_model" = pca_comp, "components" = components, 
                        "variance_explained" = prop_var_exp, "trans_train" = pca.transformed.train,
                        "trans_test" = pca.transformed.test)
@@ -125,6 +129,10 @@ tSNEProject <- function(data, output.address, indices, k) # Problem: data leakag
   all_data <- cbind(metaboliteData, model$Y, labels[,"diagnosis"])
   tsne.train <- all_data[indices,]
   tsne.test <- all_data[-indices,]
+  
+  # Writing data 
+  write.csv(tsne.train, paste(output.address, "train.csv"), sep = "", row.names = FALSE)
+  write.csv(tsne.test, paste(output.address, 'test.csv'), sep = "",  row.names = FALSE)
   
   returnValues <- list("train" = tsne.train, "test" = tsne.test)
   return(returnValues)
