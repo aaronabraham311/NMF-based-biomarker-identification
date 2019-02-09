@@ -11,6 +11,7 @@
 # Libraries
 library("NNLM") #https://cran.r-project.org/web/packages/NNLM/vignettes/Fast-And-Versatile-NMF.html#background
 library("MASS")
+library("Rtsne")
 
 extractFactors <- function (
   data,
@@ -72,7 +73,7 @@ pcaProject <- function(data, output.address, indices, k)
   # Transpose of matrix for factorization
   data <- data.matrix(data)
   row.names(data) <- data[,"RID"]
-  labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in NMF
+  labels <- data[,c("RID", "diagnosis")] # Removing labels such that it is not involved in PCA
   metaboliteData <- subset(data, select = -c(RID, diagnosis))
   
   # Removing columns with constant variance
@@ -89,9 +90,16 @@ pcaProject <- function(data, output.address, indices, k)
   variance <- std_dev^2
   prop_var_exp <- variance/(sum(variance))
   
-  # Transforming train and test data into principal components
+  # Transforming train and test data into principal components and adding diagnosis back in
   pca.transformed.train <- pca_comp$x
+  pca.transformed.train <- rbind(pca.transformed.train, labels[indices,"diagnosis"])
+  pca.transformed.train <- data.frame(pca.transformed.train)
+  row.names(pca.transformed.train)[nrow(pca.transformed.train)] <- "diagnosis"
+  
   pca.transformed.test <- scale(pca.test, pca_comp$center, pca_comp$scale) %*% pca_comp$rotation
+  pca.transformed.test <- rbind(pca.transformed.test, labels[-indices, "diagnosis"])
+  pca.transformed.test <- data.frame(pca.transformed.test)
+  row.names(pca.transformed.test)[nrow(pca.transformed.test)] <- "diagnosis"
   
   returnValues <- list("pca_model" = pca_comp, "components" = components, 
                        "variance_explained" = prop_var_exp, "trans_train" = pca.transformed.train,
@@ -99,6 +107,11 @@ pcaProject <- function(data, output.address, indices, k)
   return(returnValues)
   
   # Continue from here: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
+  
+}
+
+tSNEProject <- function(data, output.address, indices, k)
+{
   
 }
 
