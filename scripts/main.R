@@ -65,10 +65,10 @@ w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 
 # PCA Projection creation
-pcaProjectionObj <- pcaProject(handledData, data.output.address, indices, k)
+pcaProjectionObj <- pcaProject(handledData, paste(data.output.address, "pca."), indices, k)
 
 # tSNE projection creation
-tsneProjectionObj <- tSNEProject(handledData, data.output.address, indices, k)
+tsneProjectionObj <- tSNEProject(handledData, paste(data.output.address,"tsne."), indices, k)
 
 # Most important metabolites and statistics
 importantNMF <- importantMetabolites(w)

@@ -68,7 +68,7 @@ extractFactors <- function (
 
 pcaProject <- function(data, output.address, indices, k)
 {
-  print(c("Running pcaProject function on "), output.address)
+  print(c("Running pcaProject function on ", output.address))
   
   # Transpose of matrix for factorization
   data <- data.matrix(data)
@@ -92,14 +92,14 @@ pcaProject <- function(data, output.address, indices, k)
   
   # Transforming train and test data into principal components and adding diagnosis back in
   pca.transformed.train <- pca_comp$x
-  pca.transformed.train <- rbind(pca.transformed.train, labels[indices,"diagnosis"])
   pca.transformed.train <- data.frame(pca.transformed.train)
-  row.names(pca.transformed.train)[nrow(pca.transformed.train)] <- "diagnosis"
+  pca.transformed.train <- cbind(pca.transformed.train, labels[indices,"diagnosis"])
+  colnames(pca.transformed.train)[ncol(pca.transformed.train)] <- "diagnosis"
   
   pca.transformed.test <- scale(pca.test, pca_comp$center, pca_comp$scale) %*% pca_comp$rotation
-  pca.transformed.test <- rbind(pca.transformed.test, labels[-indices, "diagnosis"])
   pca.transformed.test <- data.frame(pca.transformed.test)
-  row.names(pca.transformed.test)[nrow(pca.transformed.test)] <- "diagnosis"
+  pca.transformed.test <- cbind(pca.transformed.test, labels[-indices, "diagnosis"])
+  colnames(pca.transformed.test)[ncol(pca.transformed.test)] <- "diagnosis"
   
   # Writing data 
   write.csv(pca.transformed.train, paste(output.address, "train.csv"), sep = "", row.names = FALSE)
@@ -117,6 +117,8 @@ pcaProject <- function(data, output.address, indices, k)
 # https://www.analyticsvidhya.com/blog/2017/01/t-sne-implementation-r-python/
 tSNEProject <- function(data, output.address, indices, k) # Problem: data leakage, extremely high accuracy
 {
+  print(c("Running tSNEProject function on ", output.address))
+  
   # Transpose of matrix for factorization
   data <- data.matrix(data)
   row.names(data) <- data[,"RID"]
@@ -126,7 +128,7 @@ tSNEProject <- function(data, output.address, indices, k) # Problem: data leakag
   model <- Rtsne(metaboliteData)
   
   # Splitting into training and testing
-  all_data <- cbind(metaboliteData, model$Y, labels[,"diagnosis"])
+  all_data <- cbind(model$Y, labels[,"diagnosis"])
   tsne.train <- all_data[indices,]
   tsne.test <- all_data[-indices,]
   
