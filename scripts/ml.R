@@ -17,8 +17,11 @@ baseML <- function (
   model.address) {
   
   # Removing ID
-  train$RID <- NULL
-  test$RID <- NULL
+  if ("RID" %in% colnames(train))
+  {
+    train$RID <- NULL
+    test$RID <- NULL
+  }
   
   # Factorizing predictor
   train[,predictor] <- as.factor(train[,predictor])
@@ -142,8 +145,8 @@ ensemble <- function (
   knnPredictions <- predict(knn, test)
   xgbPredictions <- predict(xgb, test)
   svmPredictions <- predict(svm, test)
-  test <- data.frame(test_rfPredictions, test_knnPredictions, test_xgbPredictions,
-                     test_svmPredictions, diagnosis = test$diagnosis)
+  test <- data.frame(rfPredictions, knnPredictions, xgbPredictions,
+                     svmPredictions, diagnosis = test$diagnosis)
   
   # Training XGB model
   ensembleModel <- train(diagnosis ~.,

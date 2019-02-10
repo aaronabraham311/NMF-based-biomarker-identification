@@ -129,12 +129,15 @@ tSNEProject <- function(data, output.address, indices, k) # Problem: data leakag
   
   # Splitting into training and testing
   all_data <- cbind(model$Y, labels[,"diagnosis"])
+  
+  all_data <- data.frame(all_data)
+  colnames(all_data)[ncol(all_data)] <- "diagnosis"
   tsne.train <- all_data[indices,]
   tsne.test <- all_data[-indices,]
   
   # Writing data 
-  write.csv(tsne.train, paste(output.address, "train.csv"), sep = "", row.names = FALSE)
-  write.csv(tsne.test, paste(output.address, 'test.csv'), sep = "",  row.names = FALSE)
+  write.csv(tsne.train, paste(output.address, "train.csv", sep = ""), row.names = FALSE)
+  write.csv(tsne.test, paste(output.address, 'test.csv', sep = ""),  row.names = FALSE)
   
   returnValues <- list("train" = tsne.train, "test" = tsne.test)
   return(returnValues)
