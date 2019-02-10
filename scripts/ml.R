@@ -133,10 +133,12 @@ ensemble <- function (
   xgbPredictions <- predict(xgb, train)
   svmPredictions <- predict(svm, train)
   
-  test$rfPredictions <- predict(rforest, test)
-  test$knnPredictions <- predict(knn, test)
-  test$xgbPredictions <- predict(xgb, test)
-  test$svmPredictions <- predict(svm, test)
+  test_rfPredictions <- predict(rforest, test)
+  test_knnPredictions <- predict(knn, test)
+  test_xgbPredictions <- predict(xgb, test)
+  test_svmPredictions <- predict(svm, test)
+  test <- data.frame(test_rfPredictions, test_knnPredictions, test_xgbPredictions,
+                     test_svmPredictions, diagnosis = test$diagnosis)
   
   # Combining new training sets 
   predDF <- data.frame(rfPredictions, knnPredictions, xgbPredictions,
