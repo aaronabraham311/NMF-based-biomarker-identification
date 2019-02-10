@@ -90,16 +90,16 @@ tsneTest <- tsneProjectionObj$test
 hierarchicalClustering(t(h), k, labels, title = "NMF Clustering", file = "nmfcluster", visualizations.output.address)
 
 # Traditional machine learning
-traditionalModels <- baseML(train, test, predictor = "diagnosis", models.output.address)
+normalModels <- baseML(train, test, predictor = "diagnosis", models.output.address)
 
 # NMF machine learning
-baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
+nmfModels <- baseML(nmfTrain, nmfTest, predictor = "diagnosis", paste(models.output.address, "nmf."))
 
 # PCA machine learning
-baseML(pcaTrain, pcaTest, predictor = "diagnosis", paste(models.output.address, "pca."))
+pcaModels <- baseML(pcaTrain, pcaTest, predictor = "diagnosis", paste(models.output.address, "pca."))
 
 # tSNE machine learning
-baseML(tsneTrain, tsneTest, predictor = "diagnosis", paste(models.output.address, "tsne."))
+tsneModels <- baseML(tsneTrain, tsneTest, predictor = "diagnosis", paste(models.output.address, "tsne."))
 
 normalRf <- readRDS(paste(models.output.address, "rf .RDS"))
 normalKnn <- readRDS(paste(models.output.address, "knn .RDS"))

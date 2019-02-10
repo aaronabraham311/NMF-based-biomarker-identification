@@ -127,28 +127,29 @@ ensemble <- function (
   model.address,
   controlParameters) {
   
-  # Getting predictions on train and test set
+  # Getting predictions on train set
   rfPredictions <- predict(rforest, train)
   knnPredictions <- predict(knn, train)
   xgbPredictions <- predict(xgb, train)
   svmPredictions <- predict(svm, train)
   
-  test_rfPredictions <- predict(rforest, test)
-  test_knnPredictions <- predict(knn, test)
-  test_xgbPredictions <- predict(xgb, test)
-  test_svmPredictions <- predict(svm, test)
-  test <- data.frame(test_rfPredictions, test_knnPredictions, test_xgbPredictions,
-                     test_svmPredictions, diagnosis = test$diagnosis)
-  
   # Combining new training sets 
   predDF <- data.frame(rfPredictions, knnPredictions, xgbPredictions,
                        svmPredictions, diagnosis = train$diagnosis)
   
+  # Prediction on testing set and combining
+  rfPredictions <- predict(rforest, test)
+  knnPredictions <- predict(knn, test)
+  xgbPredictions <- predict(xgb, test)
+  svmPredictions <- predict(svm, test)
+  test <- data.frame(test_rfPredictions, test_knnPredictions, test_xgbPredictions,
+                     test_svmPredictions, diagnosis = test$diagnosis)
+  
   # Training XGB model
-  ensembleModel <- model <- train(diagnosis ~.,
-                                  data = predDF,
-                                  method = "xgbLinear",
-                                  trControl = controlParameters)
+  ensembleModel <- train(diagnosis ~.,
+                          data = predDF,
+                          method = "xgbLinear",
+                          trControl = controlParameters)
   
   # Getting accuracies of model
   ensemblePredict <- predict(ensembleModel, test)
