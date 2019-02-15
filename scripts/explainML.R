@@ -12,6 +12,7 @@ baseExplainFunction <- function (
   output.address,
   perm.plot.title,
   ale.plot.title,
+  pdp.plot.title,
   shap.plot.title
 )
 {
@@ -31,7 +32,7 @@ baseExplainFunction <- function (
   dev.off()
   
   # ALE Plot
-  ale = FeatureEffect$new(predictor, feature)
+  ale = FeatureEffect$new(predictor, feature, method = "ale")
   
   #Intializing file
   png(filename = paste(output.address, file))
@@ -39,6 +40,13 @@ baseExplainFunction <- function (
   plot(ale, main = ale.plot.title)
   
   #Saving plot
+  dev.off()
+  
+  # PDP Plot
+  pdp = FeatureEffect$new(predictor, feature, method = "pdp")
+  
+  png(filename = paste(output.address,file, sep = ""))
+  plot(pdp, main = pdp.plot.title)
   dev.off()
   
   # Shapley Plot
