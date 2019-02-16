@@ -17,7 +17,7 @@ handle <- function (
   
   replacedData <- thresholdAndCeiling(data, ceiling, threshold)
   # scaledData <- normalize(replacedData, nonScaleColumns) No scaling as results in negative values
-  scaledData <- replacedData
+  scaledData <- replacedData[,-which(names(replacedData) %in% "RID")]
   write.csv(scaledData, paste(output.address, "normalized.csv"), sep = "", row.names = FALSE)
   
   return(scaledData)

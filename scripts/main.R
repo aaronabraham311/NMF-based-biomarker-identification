@@ -25,6 +25,7 @@ source(nmf.projection.address)
 source(visualizations.address)
 source(ml.address)
 source(statistics.address)
+source(explain.address)
 
 # Addresses for important sub-directories
 data.address <- "./data/raw/adni_plasma_qc_multiplex_11Nov2010.csv"
@@ -40,7 +41,7 @@ boxplot.output.address <- "./visuals/boxplots/"
 columnRemoval <- c(1,3,4,5) # Array of columns to remove. NA otherwise
 ceiling <- 100000
 threshold <- 0
-nonScaleColumns <- c("rid", "diagnosis")
+nonScaleColumns <- c("RID", "diagnosis")
 k <- 5
 labels <- "diagnosis"
 
@@ -119,3 +120,8 @@ pcaKnn <- readRDS(paste(models.output.address, "pca. Knn .RDS"))
 pcaXgb <- readRDS(paste(models.output.address, "pca. xgbLinear .RDS"))
 pcaSvm <- readRDS(paste(models.output.address, "pca. svmRadial .RDS"))
 pcaEnsemble <- readRDS(paste(models.output.address, "pca. ensemble.RDS"))
+
+# Machine learning explainability
+baseExplainFunction(handledData, normalRf, feature = "Eotaxin.1..pg.mL.",
+                    labels, visualizations.output.address, "Permutation Plot - Random Forest", 
+                    "ALE Plot - Eotaxin 1", "Partial Dependence Plot - Eotaxin 1", "Shapley Plot - Random Forest")

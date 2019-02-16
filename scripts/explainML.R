@@ -3,13 +3,16 @@
 # Date: February 14, 2019
 
 library(iml)
+library(caret)
 
 baseExplainFunction <- function (
-  combined_data,
+  train,
+  test,
   model,
   feature,
   classify,
   output.address,
+  file,
   perm.plot.title,
   ale.plot.title,
   pdp.plot.title,
@@ -17,47 +20,38 @@ baseExplainFunction <- function (
 )
 {
   # Creating Predictor object
-  X = combined_data[which(names(combined_data) != classify)]
-  predictor = Predictor$new(model, data = X, y = combined_data[,classify])
+  X <- train[which(names(combined_data) != classify)]
+  y <- as.factor(train[,classify])
+  predictor = Predictor$new(model, data = X, y)
   
-  # Permutation importance of features
-  importance = FeatureImp$new(predictor, loss = "mae")
-  
-  #Intializing file
-  png(filename = paste(output.address, file))
-  
-  plot(importance, main = perm.plot.title)
-  
-  #Saving plot
+  featureExplainability(predictor, feature, output.address, file, pdp.plot.title, ale.plot.title)
+  modelExplainability(predictor, output.address, file, shap.plot.title, perm.plot.title)
+}
+
+imageSave <- function(object, output.address, file, title)
+{
+  png(filename = paste(output.address, file, sep = ""))
+  plot(object, main = title)
   dev.off()
-  
+}
+
+featureExplainability <- function(predictor, feature, output.address, file, pdp.plot.title, ale.plot.title)
+{
   # ALE Plot
   ale = FeatureEffect$new(predictor, feature, method = "ale")
-  
-  #Intializing file
-  png(filename = paste(output.address, file))
-  
-  plot(ale, main = ale.plot.title)
-  
-  #Saving plot
-  dev.off()
+  imageSave(ale, output.address, file, ale.plot.title)
   
   # PDP Plot
   pdp = FeatureEffect$new(predictor, feature, method = "pdp")
-  
-  png(filename = paste(output.address,file, sep = ""))
-  plot(pdp, main = pdp.plot.title)
-  dev.off()
-  
-  # Shapley Plot
+  imageSave(pdp, output.address, file, pdp.plot.title)
+}
+
+modelExplainability <- function(model, predictor, output.address,file,shap.plot.title, perm.plot.title)
+{
+  # Shapley Plot 
   shapley = Shapley$new(predictor, x.interest = X[1,])
+  imageSave(shapley, output.address, file, shap.plot.title)
   
-  #Intializing file
-  png(filename = paste(output.address, file))
-  
-  plot(shapley, main = shap.plot.title)
-  
-  #Saving plot
-  dev.off()
-  
+  # Permutation Plot
+  imageSave(varImp(model), output.address, file, perm.plot.title)
 }
