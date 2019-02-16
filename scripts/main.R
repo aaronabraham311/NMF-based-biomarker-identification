@@ -122,6 +122,5 @@ pcaSvm <- readRDS(paste(models.output.address, "pca. svmRadial .RDS"))
 pcaEnsemble <- readRDS(paste(models.output.address, "pca. ensemble.RDS"))
 
 # Machine learning explainability
-baseExplainFunction(handledData, normalRf, feature = "Eotaxin.1..pg.mL.",
-                    labels, visualizations.output.address, "Permutation Plot - Random Forest", 
-                    "ALE Plot - Eotaxin 1", "Partial Dependence Plot - Eotaxin 1", "Shapley Plot - Random Forest")
+baseExplainFunction(nmfTrain, nmfTest, nmfRf, feature = "X1", labels, visualizations.output.address,
+                    file = "nmf")

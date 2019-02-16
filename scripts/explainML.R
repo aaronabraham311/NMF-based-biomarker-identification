@@ -12,46 +12,44 @@ baseExplainFunction <- function (
   feature,
   classify,
   output.address,
-  file,
-  perm.plot.title,
-  ale.plot.title,
-  pdp.plot.title,
-  shap.plot.title
+  file
 )
 {
   # Creating Predictor object
-  X <- train[which(names(combined_data) != classify)]
+  X <- train[which(names(train) != classify)]
   y <- as.factor(train[,classify])
   predictor = Predictor$new(model, data = X, y)
   
-  featureExplainability(predictor, feature, output.address, file, pdp.plot.title, ale.plot.title)
-  modelExplainability(predictor, output.address, file, shap.plot.title, perm.plot.title)
+  featureExplainability(predictor, feature, output.address, file)
+  modelExplainability(model, predictor, output.address, file)
 }
 
-imageSave <- function(object, output.address, file, title)
+featureExplainability <- function(predictor, feature, output.address, file)
 {
-  png(filename = paste(output.address, file, sep = ""))
-  plot(object, main = title)
+  # ALE Plot
+  #ale = FeatureEffect$new(predictor, feature, method = "ale")
+  #imageSave(ale, output.address, file, ale.plot.title, method = ".ale")
+  
+  # PDP Plot
+  pdp = Partial$new(predictor, feature)
+  
+  png(filename = paste(output.address, file, "pdp.png", sep = ""))
+  plot(pdp) 
   dev.off()
 }
 
-featureExplainability <- function(predictor, feature, output.address, file, pdp.plot.title, ale.plot.title)
-{
-  # ALE Plot
-  ale = FeatureEffect$new(predictor, feature, method = "ale")
-  imageSave(ale, output.address, file, ale.plot.title)
-  
-  # PDP Plot
-  pdp = FeatureEffect$new(predictor, feature, method = "pdp")
-  imageSave(pdp, output.address, file, pdp.plot.title)
-}
-
-modelExplainability <- function(model, predictor, output.address,file,shap.plot.title, perm.plot.title)
+modelExplainability <- function(model, predictor, output.address,file)
 {
   # Shapley Plot 
   shapley = Shapley$new(predictor, x.interest = X[1,])
-  imageSave(shapley, output.address, file, shap.plot.title)
+  
+  png(filename = paste(output.address, file, "shap.png", sep = ""))
+  plot(shapley) 
+  dev.off()
   
   # Permutation Plot
-  imageSave(varImp(model), output.address, file, perm.plot.title)
+  object <- varImp(model)
+  png(filename = paste(output.address, file, "varImp.png", sep = ""))
+  plot(object) 
+  dev.off()
 }
