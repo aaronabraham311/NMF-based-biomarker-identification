@@ -123,4 +123,8 @@ pcaEnsemble <- readRDS(paste(models.output.address, "pca. ensemble.RDS"))
 
 # Machine learning explainability
 baseExplainFunction(nmfTrain, nmfTest, nmfRf, feature = "X1", labels, visualizations.output.address,
-                    file = "nmf")
+                    file = "nmf.rf.")
+baseExplainFunction(nmfTrain, nmfTest, nmfKnn, feature = "X1", labels, visualizations.output.address,
+                    file = "nmf.knn.")
+baseExplainFunction(nmfTrain, nmfTest, nmfSvm, feature = "X1", labels, visualizations.output.address,
+                    file = "nmf.svm.")
