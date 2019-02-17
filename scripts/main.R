@@ -128,3 +128,6 @@ baseExplainFunction(nmfTrain, nmfTest, nmfKnn, feature = "X1", labels, visualiza
                     file = "nmf.knn.")
 baseExplainFunction(nmfTrain, nmfTest, nmfSvm, feature = "X1", labels, visualizations.output.address,
                     file = "nmf.svm.")
+
+baseExplainFunction(pcaTrain, pcaTest, pcaRf, feature = "PC1", labels, visualizations.output.address,
+                    file = "pca.rf.")
