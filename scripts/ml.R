@@ -163,7 +163,7 @@ ensemble <- function (
   accuracyMetric <- accuracy(confMatrix)
   
   # Writing model
-  saveRDS(model, file = paste(model.address, "ensemble.RDS"))
+  saveRDS(ensembleModel, file = paste(model.address, "ensemble.RDS"))
   
   # Returning values
   returnValues <- list("model" = ensembleModel, "predictions" = ensemblePredict, 
