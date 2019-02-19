@@ -37,7 +37,9 @@ baseML <- function (
     method = "cv",
     number = 10, #10 fold cross validation
     savePrediction = TRUE,
-    classProbs = F
+    classProbs = F,
+    sampling = "up",
+    search = "random"
   )
   
   # Models
@@ -115,7 +117,7 @@ trainPredict <- function (
                        "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric)
   
   # Writing model
-  saveRDS(model, file = paste(model.address, method,".RDS"))
+  saveRDS(model, file = paste(model.address, method,".RDS", sep = ""))
   
   return(returnValues)
 }
