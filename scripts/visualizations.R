@@ -39,6 +39,40 @@ hierarchicalClustering <- function(
   dev.off()
 }
 
+metaboliteCorrelation <- function (data, metaboliteList, title, output.address)
+{
+  data <- data[,metaboliteList]
+  cormat <- round(cor(data),2) #Correlation matrix
+  
+  get_lower_tri <- function(cormat) {
+    cormat[upper.tri(cormat)] <- NA
+    return (cormat)
+  }
+  
+  get_upper_tri <- function(cormat) {
+    cormat[lower.tri(cormat)] <- NA
+    return (cormat)
+  }
+  
+  png(filename = paste(output.address,metabolite,".png", sep = ""))
+  
+  upper_tri <- get_upper_tri(cormat)
+  melted_cormat <- melt(upper_tri, na.rm = TRUE)
+  ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
+    geom_tile(color = "white")+
+    scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                         midpoint = 0, limit = c(-1,1), space = "Lab", 
+                         name="Pearson\nCorrelation") +
+    theme_minimal()+ 
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                     size = 12, hjust = 1))+
+    coord_fixed() +
+    geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) +
+    ggtitle(title)
+  
+  dev.off()
+}
+
 metaboliteBoxplot <- function (data, metabolite, title, output.address)
 {
   #Initalizing file 
@@ -52,4 +86,14 @@ metaboliteBoxplot <- function (data, metabolite, title, output.address)
   
   # Saving plot
   dev.off()
+}
+
+metaboliteViolinPlot <- function(data, metabolite, title, output.address)
+{
+  #Intializing file
+  png(filename = paste(output.address,title,".png", sep = ""))
+  
+  ggplot(data, aes(x = diagnosis, y = metabolite, fill = Name)) + geom_violin(draw_quantiles = TRUE) + 
+    geom_boxplot(width = 0.1) +
+    labs(title = "Arginine in AD and Control")
 }
