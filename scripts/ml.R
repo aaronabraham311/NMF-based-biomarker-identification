@@ -103,7 +103,8 @@ trainPredict <- function (
   model <- train(diagnosis ~.,
                  data = train,
                  method = method,
-                 trControl = controlParameters)
+                 trControl = controlParameters,
+                 tuneLength = 15)
   
   # Predictions and accuracy metrics
   testPredictions <- predict(model, test) # Could use probabilities
