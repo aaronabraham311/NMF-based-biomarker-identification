@@ -26,11 +26,11 @@ All data is pulled from the open-source Alzheimer's disease database, ADNI. Spec
 
 ### Projection
 1. NMF:
-    1.1: Created H and W matrices from training set with k = 5
-    1.2: Convert test set into same hyperspace as training set using pseudo-inverses
+    1. Created H and W matrices from training set with k = 5
+    2. Convert test set into same hyperspace as training set using pseudo-inverses
 2. PCA:
-    2.1: Construct components with variance maximized for training data
-    2.2: Scale test set onto same components
+    1. Construct components with variance maximized for training data
+    2. Scale test set onto same components
 3. tSNE: Convert whole data into tSNE set and then split into training and testing set (data leakage! - not advised)
 
 ### Statistics and Visualizations
@@ -41,7 +41,7 @@ All data is pulled from the open-source Alzheimer's disease database, ADNI. Spec
 
 ### Machine learning
 1. Trained random forest, extreme gradient boosting, K-nearest neighbors and support vector machine and evaluate on test set
-   1.1 Ensured random grid search with up-sampling of under-represented classes
+    1. Ensured random grid search with up-sampling of under-represented classes
 2. Collect predictions of all models on training and test set. Use predictions to train an extreme gradient boosting classifier as an ensemble model.
 
 ### Explainability
