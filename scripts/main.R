@@ -103,8 +103,8 @@ pcaModels <- baseML(pcaTrain, pcaTest, predictor = "diagnosis", paste(models.out
 # tSNE machine learning
 tsneModels <- baseML(tsneTrain, tsneTest, predictor = "diagnosis", paste(models.output.address, "fineTune/tsne.", sep = ""))
 
-normalRf <- readRDS(paste(models.output.address, "rf .RDS"))
-normalKnn <- readRDS(paste(models.output.address, "knn .RDS"))
+normalRf <- readRDS(paste(models.output.address, "fineTune/rf .RDS", sep = ""))
+normalKnn <- readRDS(paste(models.output.address, "knn .RDS", sep = ""))
 normalXgb <- readRDS(paste(models.output.address, "xgbLinear .RDS"))
 normalSvm <- readRDS(paste(models.output.address, "svmRadial .RDS"))
 normalEnsembleModel <- readRDS(paste(models.output.address, "ensemble.RDS"))
@@ -120,6 +120,23 @@ pcaKnn <- readRDS(paste(models.output.address, "pca. Knn .RDS"))
 pcaXgb <- readRDS(paste(models.output.address, "pca. xgbLinear .RDS"))
 pcaSvm <- readRDS(paste(models.output.address, "pca. svmRadial .RDS"))
 pcaEnsemble <- readRDS(paste(models.output.address, "pca. ensemble.RDS"))
+
+# Creating model based on specific metabolites
+metaboliteList <- c("RID", "Eotaxin.1..pg.mL.", "Brain.Natriuretic.Peptide...BNP...pg.ml.", "Pancreatic.Polypeptide..PPP...pg.ml.",
+                   "Heparin.Binding.EGF.Like.Growth.Factor....pg.mL.", "Apolipoprotein.D..Apo.D...ug.ml.", "Vitronectin..ug.ml.",
+                   "Vascular.Endothelial.Growth.Factor..VEGF..pg.mL.", "Fibrinogen..mg.mL.", "Cystatin.C..ng.ml.",
+                   "Vascular.Cell.Adhesion.Molecule.1..VCAM...ng.mL.", "Thrombopoietin..ng.mL.", "diagnosis")
+specific_data <- handledData %>% dplyr::select(metaboliteList)
+
+indices <- createDataPartition(specific_data$RID, p = 0.7, list = FALSE) # Setting 70/30 split between training and testing
+train <- specific_data[indices,]
+test <- specific_data[-indices,]
+
+train$RID <- NULL
+test$RID <- NULL
+
+specific_models <- baseML(train, test, predictor = "diagnosis", paste(models.output.address, "fineTune/specific", sep = ''))
+
 
 # Machine learning explainability
 baseExplainFunction(nmfTrain, nmfTest, nmfRf, feature = "X1", labels, visualizations.output.address,
