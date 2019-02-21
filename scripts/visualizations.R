@@ -11,6 +11,7 @@
 
 # Libraries
 library(dendextend)
+library(reshape2)
 
 hierarchicalClustering <- function(
   data,
@@ -42,6 +43,8 @@ hierarchicalClustering <- function(
 metaboliteCorrelation <- function (data, metaboliteList, title, output.address)
 {
   data <- data[,metaboliteList]
+  data$RID <- NULL
+  data$diagnosis <- NULL
   cormat <- round(cor(data),2) #Correlation matrix
   
   get_lower_tri <- function(cormat) {
@@ -67,7 +70,6 @@ metaboliteCorrelation <- function (data, metaboliteList, title, output.address)
     theme(axis.text.x = element_text(angle = 45, vjust = 1, 
                                      size = 12, hjust = 1))+
     coord_fixed() +
-    geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) +
     ggtitle(title)
   
   dev.off()
