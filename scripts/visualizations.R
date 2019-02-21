@@ -93,7 +93,9 @@ metaboliteViolinPlot <- function(data, metabolite, title, output.address)
   #Intializing file
   png(filename = paste(output.address,title,".png", sep = ""))
   
-  ggplot(data, aes(x = diagnosis, y = metabolite, fill = Name)) + geom_violin(draw_quantiles = TRUE) + 
+  ggplot(data, aes(x = diagnosis, y = metabolite, fill = diagnosis)) + geom_violin(draw_quantiles = TRUE) + 
     geom_boxplot(width = 0.1) +
-    labs(title = "Arginine in AD and Control")
+    labs(title = title)
+  
+  dev.off()
 }
