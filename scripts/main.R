@@ -122,7 +122,11 @@ pcaSvm <- readRDS(paste(models.output.address, "pca. svmRadial .RDS"))
 pcaEnsemble <- readRDS(paste(models.output.address, "pca. ensemble.RDS"))
 
 # Creating model based on specific metabolites
-metaboliteList <- c("RID", "Apolipoprotein.A.II..Apo.A.II...ng.ml.", "Macrophage.Derived.Chemokine..MDC...pg.mL.","Apolipoprotein.D..Apo.D...ug.ml.",
+metaboliteList <- c("RID", "Eotaxin.1..pg.mL.", "Brain.Natriuretic.Peptide...BNP...pg.ml.", "Pancreatic.Polypeptide..PPP...pg.ml.",
+                   "Heparin.Binding.EGF.Like.Growth.Factor....pg.mL.", "Apolipoprotein.D..Apo.D...ug.ml.", "Vitronectin..ug.ml.",
+                   "Vascular.Endothelial.Growth.Factor..VEGF..pg.mL.", "Fibrinogen..mg.mL.", "Cystatin.C..ng.ml." ,
+                   "Vascular.Cell.Adhesion.Molecule.1..VCAM...ng.mL.", "Thrombopoietin..ng.mL.", "diagnosis")
+metaboliteList_new <- c("RID", "Apolipoprotein.A.II..Apo.A.II...ng.ml.", "Macrophage.Derived.Chemokine..MDC...pg.mL.","Apolipoprotein.D..Apo.D...ug.ml.",
                     "Vascular.Endothelial.Growth.Factor..VEGF..pg.mL.", "Complement.Factor.H..ug.ml.", "Fibrinogen..mg.mL.",
                     "Monokine.Induced.by.Gamma.Interferon..MI..pg.ml.", "Serum.Glutamic.Oxaloacetic.Transaminase..ug.mL.","Cystatin.C..ng.ml.",
                     "Fetuin.A..ug.ml.", "Vascular.Cell.Adhesion.Molecule.1..VCAM...ng.mL.","Agouti.Related.Protein..AGRP...pg.mL.", "diagnosis")

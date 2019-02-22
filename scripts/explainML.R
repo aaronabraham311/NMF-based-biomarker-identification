@@ -34,7 +34,7 @@ featureExplainability <- function(predictor, feature, output.address, file)
   pdp = Partial$new(predictor, feature)
   
   png(filename = paste(output.address, file, "pdp.png", sep = ""))
-  plot(pdp) 
+  plot(pdp) + ggtitle(feature)
   dev.off()
 }
 
@@ -43,13 +43,25 @@ modelExplainability <- function(model, predictor, output.address,file)
   # Shapley Plot 
   shapley = Shapley$new(predictor, x.interest = X[1,])
   
-  png(filename = paste(output.address, file, "shap.png", sep = ""))
-  plot(shapley) 
+  png(filename = paste(output.address, file, "shap_1.png", sep = ""))
+  shapley$plot() + ggtitle("Shapley Plot for Sample 1")
+  dev.off()
+  
+  shapley = Shapley$new(predictor, x.interest = X[50, ])
+  
+  png(filename = paste(output.address, file, "shap_50.png", sep = ""))
+  plot(shapley) + ggtitle("Shapley Plot for Sample 50")
+  dev.off()
+  
+  shapley = Shapley$new(predictor, x.interest = X[90, ])
+  
+  png(filename = paste(output.address, file, "shap_90.png", sep = ""))
+  plot(shapley) + ggtitle("Shapley Plot for Sample 90")
   dev.off()
   
   # Permutation Plot
   object <- varImp(model)
   png(filename = paste(output.address, file, "varImp.png", sep = ""))
-  plot(object) 
+  plot(object) + ggtitle("Permuatation Plot for Specific Model")
   dev.off()
 }
