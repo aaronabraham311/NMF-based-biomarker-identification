@@ -101,3 +101,12 @@ metaboliteViolinPlot <- function(data, metabolite, title, output.address)
   
   dev.off()
 }
+
+metaboliteDensityPlot <- function(data, metabolite, title, output.address)
+{
+  density_data <- data %>% dplyr::select("diagnosis", metabolite)
+  density_data[,"diagnosis"] <- as.factor(density_data[,"diagnosis"])
+  density_data[,"Condition"] <- density_data[,"diagnosis"]
+  ggplot(density_data, aes(x = metabolite, color = Condition)) + geom_density(alpha = 0.4) +
+    xlab(NULL) + ylab(NULL)
+}
