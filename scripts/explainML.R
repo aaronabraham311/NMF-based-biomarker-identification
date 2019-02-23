@@ -34,7 +34,7 @@ featureExplainability <- function(predictor, feature, output.address, file)
   pdp = Partial$new(predictor, feature)
   
   png(filename = paste(output.address, file, "pdp.png", sep = ""))
-  plot(pdp) + ggtitle(feature)
+  pdp$plot() + ggtitle(feature)
   dev.off()
 }
 
