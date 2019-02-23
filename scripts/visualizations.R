@@ -110,3 +110,15 @@ metaboliteDensityPlot <- function(data, metabolite, title, output.address)
   ggplot(density_data, aes(x = metabolite, color = Condition)) + geom_density(alpha = 0.4) +
     xlab(NULL) + ylab(NULL)
 }
+
+modelAccuracyBarplots <- function(data, title, output.address)
+{
+  plotObject <- ggplot(data, aes(x = models, y = accuracy, fill = decomp)) + 
+    geom_bar(position = position_dodge(), stat = "identity", color = "black") + 
+    labs(title = title) + xlab("Models") + ylab("Accuracy") + 
+    scale_fill_discrete(name = "Technique")
+  
+  png(filename = paste(output.address, "accuracy.png", sep = ""))
+  plot(plotObject)
+  dev.off()
+}
