@@ -18,6 +18,7 @@ baseExplainFunction <- function (
   # Creating Predictor object
   X <- train[which(names(train) != classify)]
   y <- as.factor(train[,classify])
+  levels(y) <- list(Control = "X1", MCI = "X2", AD = "X3")
   predictor = Predictor$new(model, data = X, y)
   
   featureExplainability(predictor, feature, output.address, file)
