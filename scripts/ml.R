@@ -157,7 +157,8 @@ ensemble <- function (
   ensembleModel <- train(diagnosis ~.,
                           data = predDF,
                           method = "xgbLinear",
-                          trControl = controlParameters)
+                          trControl = controlParameters,
+                         metric = "Kappa")
   
   # Getting accuracies of model
   ensemblePredict <- predict(ensembleModel, test)
