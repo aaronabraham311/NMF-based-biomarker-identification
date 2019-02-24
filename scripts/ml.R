@@ -106,15 +106,17 @@ trainPredict <- function (
                  data = train,
                  method = method,
                  trControl = controlParameters,
-                 tuneLength = 15)
+                 tuneLength = 15,
+                 metric = "Kappa")
   
   # Predictions and accuracy metrics
   testPredictions <- predict(model, test) # Could use probabilities
   confMatrix <- table(predictions = testPredictions, actual = test$diagnosis)
   accuracyMetric <- accuracy(confMatrix)
+  f1 <- f1Score(confMatrix)
   
   returnValues <- list("model" = model, "testPredictions" = testPredictions, 
-                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric)
+                       "confusionMatrix" = confMatrix, "accuracy" = accuracyMetric, "f1" = f1Score)
   
   # Writing model
   saveRDS(model, file = paste(model.address, method,".RDS", sep = ""))
@@ -211,4 +213,19 @@ accuracy <- function (conMatrix) {
   
   accuracy <- tp/total
   return(accuracy)
+}
+
+f1Score <- function(conMatrix){
+  precision1 <- conMatrix[1,1]/sum(conMatrix[,1])
+  precision2 <- conMatrix[2,2]/sum(conMatrix[,2])
+  precision3 <- conMatrix[3,3]/sum(conMatrix[,3])
+  avgPrecision <- (precision1 + precision2 + precision3)/3
+  
+  recall1 <- conMatrix[1,1]/sum(conMatrix[1,])
+  recall2 <- conMatrix[2,2]/sum(conMatrix[2,])
+  recall3 <- conMatrix[3,3]/sum(conMatrix[3,])
+  avgRecall <- (recall1 + recall2 + recall3)/3
+  
+  f1Value <- 2 * (avgPrecision * avgRecall)/(avgRecall + avgPrecision)
+  return(f1Value)
 }
