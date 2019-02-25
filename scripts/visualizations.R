@@ -28,6 +28,7 @@ hierarchicalClustering <- function(
   
   # Plotting and changing visuals
   labels(dend) <- data[,labels]
+  labels_colors(dend) <- 1:3
   plot <- dend %>%
           color_labels(k = 3)
   
