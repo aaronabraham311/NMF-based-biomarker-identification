@@ -4,6 +4,7 @@
 
 library(iml)
 library(caret)
+library(PIMP)
 
 baseExplainFunction <- function (
   train,
