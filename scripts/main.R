@@ -62,7 +62,7 @@ train <- handledData[indices,]
 test <- handledData[-indices,]
 
 # NMF Projection creation
-trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices, k)
+trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices)
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 

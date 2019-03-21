@@ -114,6 +114,30 @@ pcaProject <- function(data, output.address, indices, k)
   
 }
 
+# https://cran.r-project.org/web/packages/NNLM/vignettes/Fast-And-Versatile-NMF.html#determine-rank-k-via-missing-value-imputation
+kOptimalFactors <- function (data, output.address, indices)
+{
+  train <- data[indices,]
+  
+  png(filename = paste(output.address,"kMSE.png", sep = ""))
+  
+  plot(0, xlim = c(1,10), ylim = c(0.4, 1.4), xlab = "Rank", ylab = "MSE")
+  cols <- c('deepskyblue', 'orange', 'firebrick1', 'chartreuse3');
+  for (col in cols) {
+    index <- sample(nrow(train), nrow(train) * 0.3);
+    train1 <- train;
+    train1[index] <- NA;
+    err <- sapply(X = 1:10,
+                  FUN = function(k, A) {
+                    z <- nnmf(A, k, verbose = FALSE);
+                    mean((with(z, W%*%H)[index] - train1[index])^2)
+                  },
+                  A = train1
+    );
+    invisible(lines(err, col = col, type='b', lwd = 2, cex = 1));
+  }
+}
+
 # https://www.analyticsvidhya.com/blog/2017/01/t-sne-implementation-r-python/
 tSNEProject <- function(data, output.address, indices, k) # Problem: data leakage, extremely high accuracy
 {
