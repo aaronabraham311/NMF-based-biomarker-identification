@@ -131,18 +131,21 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
 {
   test <- data[-indices]
   
+  # Getting predictions
   model1Predictions <- predict(model1, test)
   model2Predictions <- predict(model2, test)
   model3Predictions <- predict(model3, test)
   model4Predictions <- predict(model4, test)
   model5Predictions <- predict(model5, test)
   
+  # Making roc objects for each model
   rocModel1 <- roc(test[,predictor], model1Predictions[,1])
   rocModel2 <- roc(test[,predictor], model2Predictions[,1])
   rocModel3 <- roc(test[,predictor], model3Predictions[,1])
   rocModel4 <- roc(test[,predictor], model4Predictions[,1])
   rocModel5 <- roc(test[,predictor], model5Predictions[,1])
   
+  # Creating ROC curve image and saving in directory
   png(filename = paste(output.address, "rocCurve.png", sep = ""))
   
   ggroc(list(model1Name = rocModel1, model2Name = rocModel2, model3Name = rocModel3,
@@ -150,6 +153,19 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
     ggtitle("ROC Curves of All Models")
   
   dev.off()
-
+  
+  # Creating collection of all AUC scores
   aucScores <- c(auc(rocModel1),auc(rocModel2), auc(rocModel3), auc(rocModel4), auc(rocModel5))
+  aucDataFrame <- data.frame(AUC = aucScores, Models = c(model1Name, model2Name, model3Name, model4Name, model5Name))
+  
+  
+  # Creating bar plot of all AUC scores
+  png (filename = paste(output.address, "aucScores.png", sep = ""))
+  
+  ggplot(data = aucDataFrame, aes(x = Models, y = AUC)) +
+    geom_bar(fill = "steelblue") +
+    geom_text(aes(label = AUC), vjust = 1.6, color = "white", size = 3.5) +
+    theme_minimal()
+  
+  dev.off()
 }
