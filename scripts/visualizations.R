@@ -12,6 +12,8 @@
 # Libraries
 library(dendextend)
 library(reshape2)
+library(ROCR)
+library(pROC)
 
 hierarchicalClustering <- function(
   data,
@@ -122,4 +124,32 @@ modelAccuracyBarplots <- function(data, title, output.address)
   png(filename = paste(output.address, "accuracy.png", sep = ""))
   plot(plotObject)
   dev.off()
+}
+
+rocCurves <- function(model1, model2, model3, model4, model5, data, indices, output.address, predictor,
+                      model1Name, model2Name, model3Name, model4Name, model5Name)
+{
+  test <- data[-indices]
+  
+  model1Predictions <- predict(model1, test)
+  model2Predictions <- predict(model2, test)
+  model3Predictions <- predict(model3, test)
+  model4Predictions <- predict(model4, test)
+  model5Predictions <- predict(model5, test)
+  
+  rocModel1 <- roc(test[,predictor], model1Predictions[,1])
+  rocModel2 <- roc(test[,predictor], model2Predictions[,1])
+  rocModel3 <- roc(test[,predictor], model3Predictions[,1])
+  rocModel4 <- roc(test[,predictor], model4Predictions[,1])
+  rocModel5 <- roc(test[,predictor], model5Predictions[,1])
+  
+  png(filename = paste(output.address, "rocCurve.png", sep = ""))
+  
+  ggroc(list(model1Name = rocModel1, model2Name = rocModel2, model3Name = rocModel3,
+             model4Name = rocModel4, model5Name = rocModel5)) +
+    ggtitle("ROC Curves of All Models")
+  
+  dev.off()
+
+  aucScores <- c(auc(rocModel1),auc(rocModel2), auc(rocModel3), auc(rocModel4), auc(rocModel5))
 }
