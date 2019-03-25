@@ -129,7 +129,7 @@ modelAccuracyBarplots <- function(data, title, output.address)
 rocCurves <- function(model1, model2, model3, model4, model5, data, indices, output.address, predictor,
                       model1Name, model2Name, model3Name, model4Name, model5Name)
 {
-  test <- data[-indices]
+  test <- data
   
   # Getting predictions
   model1Predictions <- predict(model1, test)
@@ -156,7 +156,7 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
   
   # Creating collection of all AUC scores
   aucScores <- c(auc(rocModel1),auc(rocModel2), auc(rocModel3), auc(rocModel4), auc(rocModel5))
-  aucDataFrame <- data.frame(AUC = aucScores, Models = c(model1Name, model2Name, model3Name, model4Name, model5Name))
+  aucDataFrame <- data.frame(Models = c(model1Name, model2Name, model3Name, model4Name, model5Name), AUC = aucScores)
   
   
   # Creating bar plot of all AUC scores

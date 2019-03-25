@@ -62,7 +62,7 @@ train <- handledData[indices,]
 test <- handledData[-indices,]
 
 # NMF Projection creation
-trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices)
+trainingProjectionsObj <- extractFactors(handledData, data.output.address, indices, k)
 w <- trainingProjectionsObj$w
 h <- trainingProjectionsObj$h
 
@@ -79,6 +79,7 @@ importantNMF <- importantMetabolites(w)
 # NMF train and test dataset
 nmfTrain <- trainingProjectionsObj$train
 nmfTest <- trainingProjectionsObj$test
+combinedNMF <- rbind(nmfTrain, nmfTest)
 
 # PCA train and test dataset
 pcaTrain <- pcaProjectionObj$trans_train
@@ -152,3 +153,7 @@ baseExplainFunction(nmfTrain, nmfTest, nmfSvm, feature = "X1", labels, visualiza
 
 baseExplainFunction(pcaTrain, pcaTest, pcaRf, feature = "PC1", labels, visualizations.output.address,
                     file = "pca.rf.")
+
+# ROC Curve
+rocCurves(nmfRf, nmfXgb, nmfKnn, nmfSvm, nmfEnsembleModel, nmfTest, indices, 
+          visualizations.address, labels, "RF", "XGB", "KNN", "SVM", "Ensemble")
