@@ -136,7 +136,11 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
   model2Predictions <- predict(model2, test)
   model3Predictions <- predict(model3, test)
   model4Predictions <- predict(model4, test)
-  model5Predictions <- predict(model5, test)
+  
+  # Making prediction dataset for ensemble model
+  ensembleTest <- data.frame(model1Predictions, model2Predictions, model3Predictions,
+                       model4Predictions, diagnosis = test$diagnosis)
+  model5Predictions <- predict(model5, ensembleTest)
   
   # Making roc objects for each model
   rocModel1 <- roc(test[,predictor], model1Predictions[,1])
