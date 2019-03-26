@@ -157,3 +157,6 @@ baseExplainFunction(pcaTrain, pcaTest, pcaRf, feature = "PC1", labels, visualiza
 # ROC Curve
 rocCurves(nmfRf, nmfXgb, nmfKnn, nmfSvm, nmfEnsembleModel, nmfTest, indices, 
           visualizations.address, labels, "RF", "XGB", "KNN", "SVM", "Ensemble")
+
+# Making ML accuracy barplot
+accuracies <- read.csv("./models/mlAccuracies.csv")
