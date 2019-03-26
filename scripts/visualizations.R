@@ -132,22 +132,22 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
   test <- data
   
   # Getting predictions
-  model1Predictions <- predict(model1, test)
-  model2Predictions <- predict(model2, test)
-  model3Predictions <- predict(model3, test)
-  model4Predictions <- predict(model4, test)
+  model1Predictions <- predict(model1, test, type = "prob")
+  model2Predictions <- predict(model2, test, type = "prob")
+  model3Predictions <- predict(model3, test, type = "prob")
+  model4Predictions <- predict(model4, test, type = "prob")
   
   # Making prediction dataset for ensemble model
-  ensembleTest <- data.frame(model1Predictions, model2Predictions, model3Predictions,
+  ensembleTest <- data.frame(model1Predictions, model3Predictions, model2Predictions,
                        model4Predictions, diagnosis = test$diagnosis)
   model5Predictions <- predict(model5, ensembleTest)
   
   # Making roc objects for each model
-  rocModel1 <- roc(test[,predictor], model1Predictions[,1])
-  rocModel2 <- roc(test[,predictor], model2Predictions[,1])
-  rocModel3 <- roc(test[,predictor], model3Predictions[,1])
-  rocModel4 <- roc(test[,predictor], model4Predictions[,1])
-  rocModel5 <- roc(test[,predictor], model5Predictions[,1])
+  rocModel1 <- multiclass.roc(test[,predictor], model1Predictions)
+  rocModel2 <- multiclass.roc(test[,predictor], model2Predictions[,1])
+  rocModel3 <- multiclass.roc(test[,predictor], model3Predictions[,1])
+  rocModel4 <- multiclass.roc(test[,predictor], model4Predictions[,1])
+  rocModel5 <- multiclass.roc(test[,predictor], model5Predictions[,1])
   
   # Creating ROC curve image and saving in directory
   png(filename = paste(output.address, "rocCurve.png", sep = ""))
