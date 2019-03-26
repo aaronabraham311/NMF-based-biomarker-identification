@@ -37,7 +37,7 @@ baseML <- function (
     method = "cv",
     number = 10, #10 fold cross validation
     savePrediction = TRUE,
-    classProbs = F,
+    classProbs = T,
     sampling = "up",
     search = "random"
   )
@@ -107,7 +107,8 @@ trainPredict <- function (
                  method = method,
                  trControl = controlParameters,
                  tuneLength = 15,
-                 metric = "Kappa")
+                 metric = "Kappa",
+                 classProbs = TRUE)
   
   # Predictions and accuracy metrics
   testPredictions <- predict(model, test) # Could use probabilities
