@@ -116,10 +116,13 @@ metaboliteDensityPlot <- function(data, metabolite, title, output.address)
 
 modelAccuracyBarplots <- function(data, title, output.address)
 {
+  
   plotObject <- ggplot(data, aes(x = models, y = accuracy, fill = decomp)) + 
     geom_bar(position = position_dodge(), stat = "identity", color = "black") + 
     labs(title = title) + xlab("Models") + ylab("Accuracy") + 
-    scale_fill_discrete(name = "Technique")
+    scale_fill_discrete(name = "Technique") +
+    geom_errorbar(aes(ymin=accuracy-(2 *sd), ymax=accuracy+(2*sd)), width=.2,
+                  position=position_dodge(.9)) 
   
   png(filename = paste(output.address, "accuracy.png", sep = ""))
   plot(plotObject)
