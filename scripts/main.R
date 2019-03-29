@@ -160,3 +160,4 @@ rocCurves(nmfRf, nmfXgb, nmfKnn, nmfSvm, nmfEnsembleModel, nmfTest, indices,
 
 # Making ML accuracy barplot
 accuracies <- read.csv("./models/mlAccuracies.csv")
+modelAccuracyBarplots(accuracies, title = "F1 Scores of All Models", visualizations.output.address)
