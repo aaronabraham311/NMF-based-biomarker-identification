@@ -176,3 +176,28 @@ rocCurves <- function(model1, model2, model3, model4, model5, data, indices, out
   
   dev.off()
 }
+
+# Few bugs to work on
+nmfRMSEPlot <- function (w, h)
+{
+  noise <- matrix(rnorm(566*148), 566, 148);
+  a <- w %*% h + noise
+  a[a < 0] <- 0
+  
+  plot(-1, xlim = c(1,6), ylim = c(0.5, 2.5), xlab = "Rank", ylab = "MSE")
+  cols <- c('deepskyblue', 'orange', 'firebrick1', 'chartreuse3');
+  for (col in cols) {
+    ind <- sample(length(A), 0.3*length(A));
+    A2 <- A;
+    A2[ind] <- NA;
+    err <- sapply(X = 1:10,
+                  FUN = function(k) {
+                    z <- nnmf(A2, k);
+                    c(mean((with(z, W %*% H)[ind] - A[ind])^2), tail(z$mse, 1));
+                  }
+    );
+    invisible(lines(err[1,], col = col, type = 'b'));
+    invisible(lines(err[2,], col = col, type = 'b', lty = 2));
+  }
+  
+}
