@@ -198,5 +198,8 @@ importantMetabolites <- function (w, k) #ncol represents number of meta-metaboli
                            importantMetabolites4, importantMetabolites5))
   importantList <- unique(importantList)
   
+  ## EASIER METHOD:
+  # importantList <- extractFeatures(metaMetabolite)
+  
   return(importantList)
 }
