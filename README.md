@@ -31,7 +31,6 @@ All data is pulled from the open-source Alzheimer's disease database, ADNI. Spec
 2. PCA:
     1. Construct components with variance maximized for training data
     2. Scale test set onto same components
-3. tSNE: Convert whole data into tSNE set and then split into training and testing set (data leakage! - not advised)
 
 ### Statistics and Visualizations
 1. Rank metabolites in each NMF component and extract top 20 unique metabolites
@@ -50,4 +49,9 @@ All data is pulled from the open-source Alzheimer's disease database, ADNI. Spec
 3. Use Shapley game theory values to determine how model predicts on a single example
 
 ## Results
-TBA
+I had three major results from this project:
+1. Identified new biomarkers that are significantly different in concentration levels between normal, MCI and Alzheimer's patients under ANOVA and Tukey Analysis
+2. Created classification models that had an F1 score greater than 0.98, incredibly accurate
+3. Using interpretability plots, I determined how each biomarker affects the probability of an AD, MCI or healthy diagnosis, which would be incredibly useful for doctors in understanding my models.
+
+This project earned an honorable mention from the American Statistical Association for its creative and unique applications of statistics. 
