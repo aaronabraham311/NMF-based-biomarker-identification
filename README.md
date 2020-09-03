@@ -1,5 +1,9 @@
 # NMF-based machine learning for the identification of Alzheimer's disease biomarkers
 
+## Presentation materials
+- [Slide deck](https://drive.google.com/file/d/1dJXsyZaGUoh4-BIWCuiGUodcl3q8Dbja/view?usp=sharing)
+- [Accompanying Shiny app](https://github.com/aaronabraham311/NMF-Biomarker-App)
+
 ## Introduction
 With more than half a million Canadians living with Alzheimer's disease combined with a fast-growing senior population, the Canadian healthcare system is in dire need of a way to better diagnose Alzheimer's disease patients and treat them earlier. 
 
